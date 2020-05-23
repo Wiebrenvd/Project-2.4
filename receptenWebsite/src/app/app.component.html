@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <link rel="stylesheet" type="text/css" href="app.component.css"/>
+  <meta charset="utf-8"/>
+  <title>Recipe</title>
+  <script type="text/javascript"
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+
+<body class="container-fluid">
+
+<!--Header-->
+<div class="header">
+  <!--Navigation Bar-->
+  <div class="row nav-bar">
+    <div class="col-md-4">
+      <h1>LOGO</h1>
+    </div>
+    <div class="col-md-8">
+
+      <div class="full-height align-right">
+        <nav class="full-height">
+          <button class="full-height" routerLink="/home"> home</button>
+          <button class="full-height" routerLink="/boodschappenlijstje"> boodschappenlijstje
+          </button>
+          <button class="full-height" routerLink="/recept"> recept</button>
+          <button class="full-height" routerLink="/receptDelen"> recept delen</button>
+          <button class="full-height" routerLink="/categorie"> categorie</button>
+          <button class="full-height" routerLink="/registreren"> registreren</button>
+          <button class="full-height" routerLink="/inloggen"> inloggen</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!--Navigation Bar End-->
+
+  <!--Categories-->
+  <div class="row categorybar">
+
+    <div class="col-md-1">
+      <button class="full-width"> <</button>
+    </div>
+
+    <div class="col-md-10 text-center">
+      <span><a href="#" class="category">boter</a></span>
+      <span><a href="#" class="category">kaas</a></span>
+      <span><a href="#" class="category">eieren</a></span>
+    </div>
+
+    <div class="col-md-1">
+      <button class="full-width"> ></button>
+    </div>
+  </div>
+  <!--Categories End-->
+</div>
+<!--  Header end-->
+
+<!--Body-->
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8 full-height app-body">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="col-md-2"></div>
+</div>
+
+<!--Body End-->
+
+<!--Footer-->
+<div class="row footer">
+</div>
+<!--Footer end-->
+
+
+</body>
+</html>
