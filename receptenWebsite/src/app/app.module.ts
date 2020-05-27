@@ -15,6 +15,9 @@ import { BereidingsweizeComponent } from './bereidingsweize/bereidingsweize.comp
 import { IngredientenComponent } from './ingredienten/ingredienten.component';
 import { CategorieComponent } from './categorie/categorie.component';
 import { ZoekfunctieComponent } from './zoekfunctie/zoekfunctie.component';
+import { PopulaireReceptenComponent } from './populaire-recepten/populaire-recepten.component';
+import { ReceptVanDeDagComponent } from './recept-van-de-dag/recept-van-de-dag.component';
+import { ReceptenInHuisComponent } from './recepten-in-huis/recepten-in-huis.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { ZoekfunctieComponent } from './zoekfunctie/zoekfunctie.component';
     BereidingsweizeComponent,
     IngredientenComponent,
     CategorieComponent,
-    ZoekfunctieComponent
+    ZoekfunctieComponent,
+    PopulaireReceptenComponent,
+    ReceptVanDeDagComponent,
+    ReceptenInHuisComponent
   ],
   imports: [
     BrowserModule,
