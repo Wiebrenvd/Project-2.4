@@ -1,1 +1,10 @@
-<p>ingredienten works!</p>
+
+<div class="div1">
+  <p>ingredienten lijst</p>
+  <ul>
+    <li *ngFor="let ingredient of ingredienten">
+      {{ ingredient.name }} {{ingredient.amount}}
+    </li>
+  </ul>
+  <p id="demo"></p>
+</div>
