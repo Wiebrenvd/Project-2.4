@@ -1,0 +1,14 @@
+<div class="container-fluid border">
+  <div class="row">
+    <h5>Recepten die je kunt maken!</h5>
+  </div>
+  <div class="row">
+
+    <ul>
+      <li *ngFor="let recipe of recipes">
+        <a href="#">{{ recipe }}</a>
+      </li>
+    </ul>
+
+  </div>
+</div>
