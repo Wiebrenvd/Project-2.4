@@ -12,7 +12,8 @@ export class IngredientenService {
   getIngredienten(): Observable<Ingredient[]> {
     return of (ingredienten);
   }
-  getBereidwijze(): Observable<string>{
-    return of (bereidwijze);
+  getBereidwijze(name): Observable<string>{
+    const text = bereidwijze.find(name).name;
+    return of (text);
   }
 }

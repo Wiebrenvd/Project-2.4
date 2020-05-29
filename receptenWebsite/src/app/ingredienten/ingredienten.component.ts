@@ -26,6 +26,6 @@ export class IngredientenComponent implements OnInit {
   }
 
   getBereidwijze(): void {
-    this.ingredientenService.getBereidwijze().subscribe(bereidwijze => this.bereidwijze = bereidwijze);
+    this.ingredientenService.getBereidwijze('Appeltaart').subscribe(bereidwijze => this.bereidwijze = bereidwijze);
   }
 }
