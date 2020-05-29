@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Ingredient } from '../ingredienten/ingredienten';
 
 @Component({
   selector: 'app-al-in-huis',
@@ -8,6 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class AlInHuisComponent implements OnInit {
 
   constructor() { }
+
+  alInHuis: Ingredient[];
+
+
 
   ngOnInit(): void {
   }
