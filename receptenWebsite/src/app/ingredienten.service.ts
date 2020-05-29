@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from './ingredienten/ingredienten';
-import { ingredienten } from './mock-ingredienten';
+import {bereidwijze, ingredienten} from './mock-ingredienten';
 import { Observable, of} from 'rxjs';
 
 @Injectable({
@@ -11,5 +11,8 @@ export class IngredientenService {
   constructor() { }
   getIngredienten(): Observable<Ingredient[]> {
     return of (ingredienten);
+  }
+  getBereidwijze(): Observable<string>{
+    return of (bereidwijze);
   }
 }
