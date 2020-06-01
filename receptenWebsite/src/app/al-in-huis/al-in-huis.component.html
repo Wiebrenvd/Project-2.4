@@ -1,1 +1,29 @@
-<p>al-in-huis works!</p>
+<div class="container-fluid border" style="height: 400px">
+  <div>
+    <h5>Al in huis</h5>
+  </div>
+  <div class="row-md-8">
+    <div class="col">
+      <li *ngFor="let ingredient of alInHuis">
+        {{ ingredient.name }} {{ingredient.amount}}
+      </li>
+    </div>
+  </div>
+  <div class="row-md-4">
+    <div class="col">
+      <form>
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="name" class="form-control" placeholder="eten bv: eieren">
+          </div>
+          <div class="col">
+            <input type="text" name="amount" class="form-control" placeholder="hoeveel bv: 1l">
+          </div>
+          <div class="col">
+            <button onclick="toevoegen()" class="btn btn-primary">toevoegen</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

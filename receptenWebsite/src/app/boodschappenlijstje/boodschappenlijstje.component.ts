@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Ingredient } from '../ingredienten/ingredienten';
+import { IngredientenService } from '../ingredienten.service';
 
 @Component({
   selector: 'app-boodschappenlijstje',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoodschappenlijstjeComponent implements OnInit {
 
-  constructor() { }
-
+  boodschappenlijstje: Ingredient[];
+  constructor(private ingredientenService: IngredientenService) { }
   ngOnInit(): void {
+    this.getIngredienten();
+  }
+
+  getIngredienten(): void{
+    this.ingredientenService.getIngredienten().subscribe(ingredienten => this.boodschappenlijstje = ingredienten);
   }
 
 }

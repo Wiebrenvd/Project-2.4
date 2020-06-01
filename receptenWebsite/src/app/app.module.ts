@@ -21,6 +21,7 @@ import { BereidingswijzeComponent } from './bereidingswijze/bereidingswijze.comp
 import { SetTimerComponent } from './set-timer/set-timer.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { IngredientenServiceComponent } from './ingredienten-service/ingredienten-service.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReceptVanDeDagComponent,
     ReceptenInHuisComponent,
     BereidingswijzeComponent,
-    SetTimerComponent
+    SetTimerComponent,
+    IngredientenServiceComponent
   ],
     imports: [
         BrowserModule,
