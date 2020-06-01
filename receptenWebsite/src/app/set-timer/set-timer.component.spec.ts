@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BereidingsweizeComponent } from './bereidingsweize.component';
+import { SetTimerComponent } from './set-timer.component';
 
-describe('BereidingsweizeComponent', () => {
-  let component: BereidingsweizeComponent;
-  let fixture: ComponentFixture<BereidingsweizeComponent>;
+describe('SetTimerComponent', () => {
+  let component: SetTimerComponent;
+  let fixture: ComponentFixture<SetTimerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BereidingsweizeComponent ]
+      declarations: [ SetTimerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BereidingsweizeComponent);
+    fixture = TestBed.createComponent(SetTimerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

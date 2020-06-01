@@ -1,1 +1,27 @@
-<p>ingredienten works!</p>
+<div class="container-fluid border body">
+  <div class="row header border-bottom">
+    <h6 class="text-center test">Ingrediënten</h6>
+  </div>
+  <div class="row">
+    <div class="col-md">
+      <br>
+
+      <ul>
+        <li *ngFor="let ingredient of ingredients">
+          {{ingredient}}
+          <button value="{{ingredient}}" (click)="removeIngredient($event.target['value'])">X</button>
+        </li>
+        <li>
+          <select (change)="addIngredient($event.target['value'])">
+            <option value="" disabled selected>Voeg nieuw ingredient toe</option>
+            <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
+              {{ingredient}}
+            </option>
+
+          </select>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
