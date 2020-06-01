@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  checkoutForm;
+
+  constructor(private formBuilder: FormBuilder,
+  ) {
+    this.checkoutForm = this.formBuilder.group({
+      email: '',
+      password: ''
+    });
+  }
 
   ngOnInit(): void {
+  }
+
+  onSubmit(customerData) {
+    // Process checkout data here
+    this.checkoutForm.reset();
+
+    console.warn('Inlog gegevens', customerData);
   }
 
 }

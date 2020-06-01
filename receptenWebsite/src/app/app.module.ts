@@ -18,6 +18,7 @@ import { ZoekfunctieComponent } from './zoekfunctie/zoekfunctie.component';
 import { PopulaireReceptenComponent } from './populaire-recepten/populaire-recepten.component';
 import { ReceptVanDeDagComponent } from './recept-van-de-dag/recept-van-de-dag.component';
 import { ReceptenInHuisComponent } from './recepten-in-huis/recepten-in-huis.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ReceptenInHuisComponent } from './recepten-in-huis/recepten-in-huis.com
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
