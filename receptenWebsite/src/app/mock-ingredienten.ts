@@ -1,5 +1,5 @@
 import {Ingredient} from './ingredienten/ingredienten';
-import {Bereidwijze} from "./bereidingsweize/bereidwijze";
+import {Bereidwijze} from './bereidingswijze/bereidwijze';
 
 export const ingredienten = [
   new Ingredient('Appels', '700g'),

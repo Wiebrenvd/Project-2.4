@@ -1,50 +1,27 @@
-<div class="container-fluid">
-  <div class="row mb-3">
-    <div class="col-md-6">
-      <div class="container-fluid border">
-        <h5>receptnaam :</h5>
-        <p>{{bereidwijze}}</p>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="container-fluid border">
-        <h5>ingredienten lijst</h5>
-        <ul>
-          <li *ngFor="let ingredient of ingredienten">
-            {{ ingredient.name }} {{ingredient.amount}}
-          </li>
-        </ul>
-      </div>
+<div class="container-fluid border body">
+  <div class="row header border-bottom">
+    <h6 class="text-center test">Ingrediënten</h6>
+  </div>
+  <div class="row">
+    <div class="col-md">
+      <br>
+
+      <ul>
+        <li *ngFor="let ingredient of ingredients">
+          {{ingredient}}
+          <button value="{{ingredient}}" (click)="removeIngredient($event.target['value'])">X</button>
+        </li>
+        <li>
+          <select (change)="addIngredient($event.target['value'])">
+            <option value="" disabled selected>Voeg nieuw ingredient toe</option>
+            <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
+              {{ingredient}}
+            </option>
+
+          </select>
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="row mb-3">
-    <div class="col-md-6">
-      <div class="container-fluid border">
-        <h5>afbeelding recept</h5>
-        <img src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/vimdb/72912_992-0-4311-4311.jpg"width="60%"height="60%">
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="container-fluid border">
-        <p>kook timers van het recept</p>
-        <div class="col-md-12">
-          <div class="container-fluid border">
-            <p>Timer 1  2:50</p>
-            <img src="https://w7.pngwing.com/pngs/711/347/png-transparent-computer-icons-timer-chronometer-watch-clock-clock-trademark-logo-share-icon.png" width="10%" height="10%">
-          </div>
-          <div class="container-fluid border">
-            <p>Timer 2  1:25</p>
-            <img src="https://w7.pngwing.com/pngs/711/347/png-transparent-computer-icons-timer-chronometer-watch-clock-clock-trademark-logo-share-icon.png" width="10%" height="10%">
-          </div>
-          <div class="container-fluid border">
-            <p>Timer 3  0:50</p>
-            <img src="https://w7.pngwing.com/pngs/711/347/png-transparent-computer-icons-timer-chronometer-watch-clock-clock-trademark-logo-share-icon.png" width="10%" height="10%">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </div>
-
-
-

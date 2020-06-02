@@ -1,7 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Ingredient} from './ingredienten';
-import {IngredientenService} from '../ingredienten.service';
-import {bereidwijze} from "../mock-ingredienten";
 
 @Component({
   selector: 'app-ingredienten',
@@ -9,23 +6,40 @@ import {bereidwijze} from "../mock-ingredienten";
   styleUrls: ['./ingredienten.component.css']
 })
 export class IngredientenComponent implements OnInit {
+  ingredients: string[];
+  allIngredients: string[];
 
-  ingredienten: Ingredient[];
-  bereidwijze: string;
-
-  constructor(private ingredientenService: IngredientenService) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.getIngredienten();
-    this.getBereidwijze();
+    this.ingredients = [];
+    this.allIngredients = ['Kaas', 'Ham', 'Ei']; // TODO database
+
+
   }
 
-  getIngredienten(): void {
-    this.ingredientenService.getIngredienten().subscribe(ingredienten => this.ingredienten = ingredienten);
+  addIngredient(ingredient: string) {
+    if (!this.ingredients.includes(ingredient) && ingredient.length > 0) {
+      this.ingredients.push(ingredient);
+    }
   }
 
-  getBereidwijze(): void {
-    this.ingredientenService.getBereidwijze('Appeltaart').subscribe(bereidwijze => this.bereidwijze = bereidwijze);
+  removeIngredient(ingredient: string) {
+    if (this.ingredients.includes(ingredient)) {
+      const index: number = this.ingredients.indexOf(ingredient);
+      if (index !== -1) {
+        this.ingredients.splice(index, 1);
+      }
+    }
+  }
+
+  getIngredienten() {
+    if (this.ingredients.length > 0) {
+      return this.ingredients;
+    } else {
+      throw new Error('Geen ingredienten toegevoegd!');
+    }
+
   }
 }

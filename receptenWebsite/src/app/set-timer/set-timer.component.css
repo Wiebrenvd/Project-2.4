@@ -1,0 +1,16 @@
+/* Haalt pijltjes weg bij number input (Firefox) */
+input[type='number'] {
+  width:30px;
+
+}
+
+/* Haalt pijltjes weg bij number input (Chrome, safari) */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.timer {
+  margin: 10px 10px 10px 0px;
+}

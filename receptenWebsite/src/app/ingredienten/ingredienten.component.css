@@ -1,3 +1,22 @@
+.test {
+
+}
+
+
+/*li {*/
+/*  list-style: none;*/
+/*}*/
+
+.body {
+  height: 500px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+
+.submit-button {
+  width:20%;
+}
 .div1 {
   text-align: center;
   border: 1px solid black;

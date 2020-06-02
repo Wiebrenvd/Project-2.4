@@ -1,0 +1,28 @@
+<div class="container-fluid border body">
+  <div class="row header border-bottom">
+    <h6 class="text-center full-width">Bereidingswijze</h6>
+  </div>
+  <div class="row">
+    <div class="row-body">
+    <textarea (input)="bereidingswijze = $event.target.value" id="bereidingswijze"></textarea>
+
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="timers">
+      <div #timerDiv></div>
+
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="row-body">
+      <button *ngIf="this.timerComponents.length<3" (click)="addTimer(setTimerComponentClass)">Voeg
+        nieuwe timer toe
+      </button>
+
+    </div>
+  </div>
+
+</div>
