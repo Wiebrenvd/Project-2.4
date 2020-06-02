@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -7,27 +7,28 @@ import {FormBuilder} from '@angular/forms';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  checkoutForm;
+  reactiveForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
-  ) {
-    this.checkoutForm = this.formBuilder.group({
-      name: '',
-      email: '',
-      password: '',
-      passwordrepeat: ''
+    private fb: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.createForm();
+  }
+
+  createForm() {
+    this.reactiveForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  ngOnInit(): void {
+  onSubmit() {
+    console.log('reactiveForm' , this.reactiveForm.value);
   }
-
-  onSubmit(customerData) {
-    // Process checkout data here
-    this.checkoutForm.reset();
-
-    console.warn('Register gegevens', customerData);
-  }
+  get name() { return this.reactiveForm.get('name'); }
+  get email() { return this.reactiveForm.get('email'); }
+  get password() { return this.reactiveForm.get('password'); }
 }

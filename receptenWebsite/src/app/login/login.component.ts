@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -7,25 +7,36 @@ import {FormBuilder} from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  reactiveForm: FormGroup;
 
-  checkoutForm;
 
-  constructor(private formBuilder: FormBuilder,
-  ) {
-    this.checkoutForm = this.formBuilder.group({
-      email: '',
-      password: ''
+  constructor(private fb: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.createForm();
+  }
+
+  createForm() {
+    this.reactiveForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
     });
   }
 
-  ngOnInit(): void {
+  onSubmit() {
+    console.log('reactiveForm', this.reactiveForm.value);
   }
 
-  onSubmit(customerData) {
-    // Process checkout data here
-    this.checkoutForm.reset();
-
-    console.warn('Inlog gegevens', customerData);
+  get name() {
+    return this.reactiveForm.get('name');
   }
 
+  get email() {
+    return this.reactiveForm.get('email');
+  }
+
+  get password() {
+    return this.reactiveForm.get('password');
+  }
 }

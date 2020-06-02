@@ -6,40 +6,39 @@
 <div class="row justify-content-center">
   <div class="col-md-5">
     <div class="container border">
-      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+      <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+        <label class="label">Gebruikersnaam:</label><br>
+        <input class="input"
+               type="text"
+               formControlName="name">
+        <br>
+        <p *ngIf="name.invalid && !name.pristine">Gebruikersnaam is vereist.</p>
 
-        <div>
-          <label for="name">
-            Naam:
-          </label><br>
-          <input id="name" type="text" formControlName="name">
+        <label class="label">Email:</label><br>
+        <input class="input"
+               type="text"
+               formControlName="email">
+        <br>
+        <div *ngIf="email.invalid && !email.pristine">
+          <p *ngIf="email.errors.email">Geen geldige email meegegeven.</p>
         </div>
 
-        <div>
-          <label for="email">
-            Email:
-          </label><br>
-          <input id="email" type="text" formControlName="email">
+
+        <label class="label">Wachtwoord:</label><br>
+        <input class="input"
+               type="password"
+               formControlName="password">
+        <br>
+        <div *ngIf="password.invalid && !password.pristine">
+          <p *ngIf="password.errors.minlength">Het wachtwoord moet minstens 6 tekens lang zijn.</p>
         </div>
 
-        <div>
-          <label for="password">
-            Wachtwoord:
-          </label><br>
-          <input id="password" type="text" formControlName="password">
-        </div>
 
-        <div>
-          <label for="passwordrepeat">
-            Wachtwoord:
-          </label><br>
-          <input id="passwordrepeat" type="text" formControlName="passwordrepeat">
-        </div>
-
-        <button class="button" type="submit">Registreren</button>
+        <button type="submit" [disabled]="!reactiveForm.valid">Registreren</button>
         <a href="http://localhost:4200/inloggen" class="btn btn-link">Heb je al een account?</a>
       </form>
     </div>
   </div>
 </div>
+
 
