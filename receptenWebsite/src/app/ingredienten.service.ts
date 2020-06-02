@@ -13,7 +13,7 @@ export class IngredientenService {
     return of (ingredienten);
   }
   getBereidwijze(name): Observable<string>{
-    const text = bereidwijze.find(name).name;
+    const text = bereidwijze.find((s) => s.name === name).text;
     return of (text);
   }
 }
