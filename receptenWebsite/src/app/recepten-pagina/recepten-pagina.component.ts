@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Ingredient} from '../ingredienten/ingredienten';
+import {IngredientenService} from '../ingredienten.service';
 
 @Component({
   selector: 'app-recepten-pagina',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReceptenPaginaComponent implements OnInit {
 
-  constructor() { }
+  ingredienten: Ingredient[];
+  bereidwijze: string;
+
+  constructor(private ingredientenService: IngredientenService) {
+  }
 
   ngOnInit(): void {
+    this.getIngredienten();
+    this.getBereidwijze();
+  }
+
+  getIngredienten(): void {
+    this.ingredientenService.getIngredienten().subscribe(ingredienten => this.ingredienten = ingredienten);
+  }
+
+  getBereidwijze(): void {
+    this.ingredientenService.getBereidwijze('Appeltaart').subscribe(bereidwijze => this.bereidwijze = bereidwijze);
   }
 
 }
