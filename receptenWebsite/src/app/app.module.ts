@@ -22,6 +22,7 @@ import { SetTimerComponent } from './set-timer/set-timer.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IngredientenServiceComponent } from './ingredienten-service/ingredienten-service.component';
+import { TimerComponent } from './timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { IngredientenServiceComponent } from './ingredienten-service/ingrediente
     ReceptenInHuisComponent,
     BereidingswijzeComponent,
     SetTimerComponent,
-    IngredientenServiceComponent
+    IngredientenServiceComponent,
+    TimerComponent
   ],
     imports: [
         BrowserModule,

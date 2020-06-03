@@ -1,5 +1,6 @@
 import {Ingredient} from './ingredienten/ingredienten';
 import {Bereidwijze} from './bereidingswijze/bereidwijze';
+import {Timer} from './timer/timer';
 
 export const ingredienten = [
   new Ingredient('Appels', '700g'),
@@ -17,6 +18,11 @@ export const bereidwijze = [
     '\n' + 'Bak de taart in de voorverwarmde oven ongeveer 50 minuten tot gaar en goudbruin.')
 ];
 
+export const timers = [
+  new Timer(0, 300),
+  new Timer(0, 300),
+  new Timer(0, 300),
+];
 
 
 

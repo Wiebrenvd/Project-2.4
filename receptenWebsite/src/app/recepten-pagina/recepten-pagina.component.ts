@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {IngredientenService} from '../ingredienten.service';
+import {Timer} from '../timer/timer';
 
 @Component({
   selector: 'app-recepten-pagina',
@@ -11,6 +12,7 @@ export class ReceptenPaginaComponent implements OnInit {
 
   ingredienten: Ingredient[];
   bereidwijze: string;
+  timers: Timer[];
 
   constructor(private ingredientenService: IngredientenService) {
   }
@@ -18,6 +20,8 @@ export class ReceptenPaginaComponent implements OnInit {
   ngOnInit(): void {
     this.getIngredienten();
     this.getBereidwijze();
+    this.getTimers();
+    console.log();
   }
 
   getIngredienten(): void {
@@ -28,4 +32,7 @@ export class ReceptenPaginaComponent implements OnInit {
     this.ingredientenService.getBereidwijze('Appeltaart').subscribe(bereidwijze => this.bereidwijze = bereidwijze);
   }
 
+  getTimers() {
+    this.ingredientenService.getTimers('Appeltaart').subscribe(timer => this.timers = timer);
+  }
 }
