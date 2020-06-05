@@ -6,8 +6,4 @@ export const inHuis = [
   new Ingredient('suiker', '1500g'),
   new Ingredient('bier', '24l'),
   new Ingredient('kaas', '5kg'),
-  new Ingredient('boter', '200g'),
-  new Ingredient('suiker', '1500g'),
-  new Ingredient('bier', '24l'),
-  new Ingredient('kaas', '5kg')
 ];

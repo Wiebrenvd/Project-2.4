@@ -4,23 +4,31 @@
   </div>
   <div class="row-md-8">
     <div class="col">
-      <li *ngFor="let ingredient of alInHuis">
-        {{ ingredient.name }} {{ingredient.amount}}
-      </li>
+      <div class="row"  *ngFor="let ingredient of alInHuis">
+        <div class="col-md-4">
+          {{ ingredient.name }}
+        </div>
+        <div class="col">
+          {{ingredient.amount}}
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-primary" (click)="verwijderen(ingredient.name)">X</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row-md-4">
     <div class="col">
-      <form>
+      <form (ngSubmit)="onSubmit()">
         <div class="form-row">
           <div class="col">
-            <input type="text" name="name" class="form-control" placeholder="eten bv: eieren">
+            <input ngModel name="name" #name="ngModel" id="name" type="text" placeholder="eten bv: eieren">
           </div>
           <div class="col">
-            <input type="text" name="amount" class="form-control" placeholder="hoeveel bv: 1l">
+            <input ngModel name="amount" #amount="ngModel" id="amount" type="text" placeholder="hoeveel bv: 1l">
           </div>
           <div class="col">
-            <button onclick="toevoegen()" class="btn btn-primary">toevoegen</button>
+            <button type="submit" class="btn btn-primary" (click)="toevoegen(name, amount)">toevoegen</button>
           </div>
         </div>
       </form>

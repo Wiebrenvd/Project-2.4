@@ -19,4 +19,21 @@ export class BoodschappenlijstjeComponent implements OnInit {
     this.ingredientenService.getIngredienten().subscribe(ingredienten => this.boodschappenlijstje = ingredienten);
   }
 
+  verwijderen(name): void{
+    let i = 0;
+    let ingredient: Ingredient;
+    for (ingredient of this.boodschappenlijstje){
+      if (ingredient.name === name){
+        this.boodschappenlijstje.splice(i, 1);
+      }
+      i++;
+    }
+  }
+
+  toevoegen(name, amount): void{
+    this.boodschappenlijstje.push(new Ingredient(name.value, amount.value));
+    // console.log(alInHuisForm);
+    console.log('test');
+  }
+
 }

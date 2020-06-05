@@ -19,7 +19,7 @@ import { ReceptVanDeDagComponent } from './recept-van-de-dag/recept-van-de-dag.c
 import { ReceptenInHuisComponent } from './recepten-in-huis/recepten-in-huis.component';
 import { BereidingswijzeComponent } from './bereidingswijze/bereidingswijze.component';
 import { SetTimerComponent } from './set-timer/set-timer.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IngredientenServiceComponent } from './ingredienten-service/ingredienten-service.component';
 import { TimerComponent } from './timer/timer.component';
@@ -46,12 +46,13 @@ import { TimerComponent } from './timer/timer.component';
     IngredientenServiceComponent,
     TimerComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        NgbModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    NgbModule,
+    FormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

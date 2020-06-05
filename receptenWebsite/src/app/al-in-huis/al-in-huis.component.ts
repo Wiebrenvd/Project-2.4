@@ -10,6 +10,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class AlInHuisComponent implements OnInit {
   alInHuis: Ingredient[];
+  submitted = false;
 
   constructor(private userDataService: UserDataService) { }
   ngOnInit(): void {
@@ -20,9 +21,21 @@ export class AlInHuisComponent implements OnInit {
     this.userDataService.getInHuis().subscribe(alInHuis => this.alInHuis = alInHuis);
   }
 
-  toevoegen(): void{
-    this.alInHuis.push(new Ingredient(document.getElementById('name').innerText, document.getElementById('amount').innerText));
-    console.log(document.getElementById('name').innerText);
+  onSubmit(){ this.submitted = true; }
+
+  verwijderen(name): void{
+    let i = 0;
+    let ingredient: Ingredient;
+    for (ingredient of this.alInHuis){
+      if (ingredient.name === name){
+        this.alInHuis.splice(i, 1);
+      }
+      i++;
+    }
+  }
+
+  toevoegen(name, amount): void{
+    this.alInHuis.push(new Ingredient(name.value, amount.value));
     console.log('test');
   }
 
