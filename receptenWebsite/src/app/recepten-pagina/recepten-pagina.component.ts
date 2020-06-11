@@ -35,4 +35,8 @@ export class ReceptenPaginaComponent implements OnInit {
   getTimers() {
     this.ingredientenService.getTimers('Appeltaart').subscribe(timer => this.timers = timer);
   }
+
+  addToBoodschappen(){
+    //console.log(this.boodschappenlijstComponent.getIngredienten());
+  }
 }

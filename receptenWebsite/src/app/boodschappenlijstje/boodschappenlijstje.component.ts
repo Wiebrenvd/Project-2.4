@@ -35,5 +35,4 @@ export class BoodschappenlijstjeComponent implements OnInit {
     // console.log(alInHuisForm);
     console.log('test');
   }
-
 }
