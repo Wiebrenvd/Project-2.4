@@ -11,7 +11,7 @@ export class PopulaireReceptenComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.popularRecipes = ['Rijst', 'kip', 'spaghetti'];
+    this.popularRecipes = ['Rijst', 'Kip', 'Spaghetti'];
   }
 
 }

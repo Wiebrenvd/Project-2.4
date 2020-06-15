@@ -6,7 +6,7 @@
 
     <ul>
       <li *ngFor="let recipe of popularRecipes">
-        <a href="#">{{ recipe }}</a>
+        <a [routerLink]="['/recept']" [queryParams]="{currentrecept: recipe}">{{ recipe }}</a>
       </li>
     </ul>
 
