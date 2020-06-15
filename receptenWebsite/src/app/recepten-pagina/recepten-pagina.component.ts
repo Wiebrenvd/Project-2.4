@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {IngredientenService} from '../ingredienten.service';
 import {Timer} from '../timer/timer';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-recepten-pagina',
@@ -13,15 +14,27 @@ export class ReceptenPaginaComponent implements OnInit {
   ingredienten: Ingredient[];
   bereidwijze: string;
   timers: Timer[];
+  currentRecept: string;
+  receptID: number;
 
-  constructor(private ingredientenService: IngredientenService) {
+  constructor(private ingredientenService: IngredientenService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+
+    this.getCurrentRecept();
     this.getIngredienten();
     this.getBereidwijze();
     this.getTimers();
-    console.log();
+  }
+
+  getCurrentRecept(): void{
+    this.activatedRoute.queryParams.subscribe(params => {
+      const currentrecept = params['currentrecept'];
+      this.currentRecept = currentrecept;
+      //this.receptID = SELECT * FROM mydb.recipe WHERE recipeName = currentrecept;
+    });
   }
 
   getIngredienten(): void {
@@ -34,5 +47,9 @@ export class ReceptenPaginaComponent implements OnInit {
 
   getTimers() {
     this.ingredientenService.getTimers('Appeltaart').subscribe(timer => this.timers = timer);
+  }
+
+  addToBoodschappen(){
+    //console.log(this.boodschappenlijstComponent.getIngredienten());
   }
 }

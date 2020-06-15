@@ -11,7 +11,7 @@ export class ReceptenInHuisComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.recipes = ['Rijst', 'kip', 'spaghetti'];
+    this.recipes = ['Rijst', 'Kip', 'Spaghetti'];
   }
 
 }
