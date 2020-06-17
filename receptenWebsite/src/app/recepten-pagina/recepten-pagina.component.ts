@@ -16,6 +16,7 @@ export class ReceptenPaginaComponent implements OnInit {
   timers: Timer[];
   currentRecept: string;
   receptID: number;
+  image: any;
 
   constructor(private ingredientenService: IngredientenService,
               private activatedRoute: ActivatedRoute) {
@@ -26,6 +27,7 @@ export class ReceptenPaginaComponent implements OnInit {
     this.getCurrentRecept();
     this.getIngredienten();
     this.getBereidwijze();
+    this.getReceptImage();
     this.getTimers();
   }
 
@@ -38,14 +40,21 @@ export class ReceptenPaginaComponent implements OnInit {
   }
 
   getIngredienten(): void {
+    //SELECT * FROM mydb.recipeingredients WHERE idRecipe = receptID;
     this.ingredientenService.getIngredienten().subscribe(ingredienten => this.ingredienten = ingredienten);
   }
 
   getBereidwijze(): void {
+    //SELECT * FROM mydb.preparationmethod WHERE fk_idRecipe = receptID;
     this.ingredientenService.getBereidwijze('Appeltaart').subscribe(bereidwijze => this.bereidwijze = bereidwijze);
+  }
+  getReceptImage(): void {
+    this.image = 'https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/vimdb/72912_992-0-4311-4311.jpg';
+    //this.image = SELECT Image FROM mydb.recipeingredients WHERE idRecipe = receptID;
   }
 
   getTimers() {
+    //SELECT CookTime FROM mydb.recipe WHERE idRecipe = receptID;
     this.ingredientenService.getTimers('Appeltaart').subscribe(timer => this.timers = timer);
   }
 
