@@ -1,19 +1,11 @@
 const express = require('express');
-const http = require("http");
+const http = require('http');
 const cors = require('cors');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-var serveStatic = require('serve-static');
-const events = require('./receptDelen.js');
+const jwt = require('jsonwebtoken');
 
-//app.use(express.static("C:\Users\Ramon\IdeaProjects\Project-2.4", 'receptenWebsite'));
-
-//const appFolder = '../receptenWebsite/src/app/home-page'
-//app.get('*.*',express.static(appFolder));
-
-//app.all('*', function (req, res) {
-  //res.status(200).sendFile(`/home-page.component.ts`, {root: appFolder});
-//});
+const privateKey = 'hoi';
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -22,73 +14,138 @@ const connection = mysql.createConnection({
   database: 'mydb'
 });
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log('Verbonden met database')
-})
+
+connection.connect(err => {
+  if (err) {
+    throw err;
+  }
+  console.log('Verbonden met database');
+});
 
 
-const app = express()
-app.use(cors())
-app.use(bodyParser.json())
-app.use(events(connection));
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log('Server started!')
-})
-
-
-
-app.get('/test', (req, res) => {
-  connection.query('select * from ingredients', function (err, data) {
-    if (err) console.log(err)
-    res.send(data)
-    console.log(data)
-  })//res.send('Hello World!'))
-})
-
-app.get('/test2', (req, res) => {
-  connection.query('select * from recipe', function (err, data) {
-    if (err) console.log(err)
-    res.send(data)
-    console.log(data)
-  })//res.send('Hello World!'))
-})
-
-
-
-app.route('/recept').post((req, res) => {
-  res.send(201, req.body)
-})
-
-app.route('/api/recept/:name').get((req, res) => {
-  const requestedRecipeName = req.params['recipeName']
-  res.send({ name: requestedRecipeName })
-  res.redirect('https://google.com')
-})
-
-app.route('/recept/:name').put((req, res) => {
-  res.send(200, req.body)
-})
-
-app.route('/recept/:name').delete((req, res) => {
-  res.sendStatus(204)
-})
-
-
-
-
-
-
-
-
-var server = app.listen(PORT, "127.0.0.1", function () {
-  var host = server.address().address
-  var port = server.address().port
-  console.log("Listening to http://%s:%s", host, port)
+  console.log('Server started!');
 });
-//app.use('/',express.static(__dirname + '/'));
+
+
+function createJWT(id, email) {
+
+  const head = {algorithm: 'HS256'};
+  const body = {
+    sub: id,
+    name: email,
+    iat: new Date().getTime(),
+    exp: 900000
+  };
+  return jwt.sign(body, privateKey, head);
+}
+
+app.get('/login', (req, res) => {
+  connection.query(`select id, email, pass from users where email='${req.query.email}'`, (err, data) => {
+    if (err) {
+      console.log(err);
+    }
+
+    if (data.length > 0) {
+      if (req.query.password === data[0].pass) {
+        send(res, createJWT(data[0].id, data[0].email));
+      }
+    }
+
+    sendStatus(res, 401);
+
+  });
+});
+
+function checkJWT(req) {
+  const token = jwt.verify(req.query.token, privateKey);
+
+  return {id: token.id, email: token.email};
+}
+
+function sendStatus(res, status) {
+  res.status(status);
+}
+
+function send(res, str) {
+  res.send(str);
+}
+
+app.get('/recept/:id', (req, res) => {
+  const response = {
+    token: undefined,
+    ingredients: {},
+    name: undefined,
+    desc: undefined,
+    picture: undefined
+
+  };
+  try {
+    if (req.query.token) {
+      const fields = checkJWT(req);
+      response.token = createJWT(fields.id, fields.email);
+    }
+  } catch (err) {
+    if (err.name !== 'TokenExpiredError') {
+      sendStatus(res, 401);
+      console.error(err);
+    }
+  }
+  connection.query(`
+  SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
+inner JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
+inner join ingredients as ing on rhi.ingredients_id = ing.id
+where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
+
+
+    if (err) {
+      console.log(err);
+    }
+
+    if (data.length > 0) {
+
+      const ingredients = [];
+      for (const jsonObj of data) {
+
+        ingredients.push({name: jsonObj.ingredient_name, amount: jsonObj.amount});
+      }
+      response.ingredients = ingredients;
+      response.name = data[0].recipe_name;
+      response.desc = data[0].recipe_desc;
+      response.picture = data[0].recipe_picture;
+      send(res, JSON.stringify(response));
+    }
+  });
+});
+
+app.get('/zoek', (req, res) => {
+  connection.query(`SELECT * from recipes where name LIKE '%${req.query.searchString}%'`, (err, data) => {
+    if (err) {
+      console.log(err);
+    }
+    if (data.length > 0) {
+      const json = [];
+      for (const jsonObj of data) {
+        json.push(jsonObj);
+      }
+
+      send(res, JSON.stringify(json));
+    }
+  });
+});
+
+
+let server = app.listen(PORT, '127.0.0.1', () => {
+  const host = server.address().address;
+  const port = server.address().port;
+  console.log('Listening to http://%s:%s', host, port);
+});
+// app.use('/',express.static(__dirname + '/'));
 
 

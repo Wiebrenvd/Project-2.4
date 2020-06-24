@@ -2,16 +2,16 @@
   <div class="row md-3">
     <div class="col-md-6">
       <div class="border">
-        <h5>{{currentRecept}}</h5>
-        <p>{{bereidwijze}}</p>
+        <h5>{{name}}</h5>
+        <p>{{description}}</p>
       </div>
     </div>
     <div class="col-md-6">
       <div class="border">
         <h5>ingredienten lijst</h5>
         <ul>
-          <li *ngFor="let ingredient of ingredienten">
-            {{ ingredient.name }} {{ingredient.amount}}
+          <li *ngFor="let ingredient of ingredients">
+            {{ ingredient.amount }} {{ingredient.name}}
           </li>
         </ul>
         <div>

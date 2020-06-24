@@ -24,6 +24,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IngredientenServiceComponent } from './ingredienten-service/ingredienten-service.component';
 import { TimerComponent } from './timer/timer.component';
 import {HttpClientModule} from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import {ConfigService} from "./config.service";
+import { ResultComponent } from './result/result.component';
+import { RecipeResultComponent } from './recipe-result/recipe-result.component';
+import {httpInterceptorProviders} from "./http-interceptors";
 
 @NgModule({
   declarations: [
@@ -45,7 +51,9 @@ import {HttpClientModule} from '@angular/common/http';
     BereidingswijzeComponent,
     SetTimerComponent,
     IngredientenServiceComponent,
-    TimerComponent
+    TimerComponent,
+    ResultComponent,
+    RecipeResultComponent
   ],
   imports: [
     BrowserModule,
@@ -53,9 +61,12 @@ import {HttpClientModule} from '@angular/common/http';
     ReactiveFormsModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
+  providers: [ConfigService,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

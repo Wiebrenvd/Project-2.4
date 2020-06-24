@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import {catchError, retry} from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpParams,
+  HttpRequest
+} from '@angular/common/http';
 
 export interface Recept {
   name: string;
@@ -11,26 +16,24 @@ export interface Recept {
 export class ConfigService {
   constructor(private http: HttpClient) {}
 
-  getAlleRecepten(): Observable<Recept[]> {
-    return this.http.get<Recept[]>('http://localhost:4300/recept');
+/*
+* na elke subscribe, bij een response, eerst checken naar jwt.
+* */
+  sendLoginData(email: string, password: string) {
+    const params = new HttpParams().set('token', localStorage.getItem('jwt')).set('email', email).set('password', password);
+    const responseType = 'text';
+    return this.http.get('http://127.0.0.1:3000/login', {responseType, params});
+
   }
 
-  getRecept(name: string): Observable<Recept> {
-    return this.http.get<Recept>('http://localhost:4200/recept' + name);
+  sendSearch(searchString: string) {
+    const params = new HttpParams().set('token', localStorage.getItem('jwt')).set('searchString', searchString);
+    return this.http.get('http://127.0.0.1:3000/zoek', {params});
   }
 
-  addRecept(recept: Recept): Observable<Recept> {
-    return this.http.post<Recept>('http://localhost:4200/receptDelen', recept);
-  }
 
-  updateRecept(recept: Recept): Observable<void> {
-    return this.http.put<void>(
-      'http://localhost:4200/recept' + recept.name,
-      recept
-    );
-  }
-
-  deleteReceot(name: string) {
-    return this.http.delete('http://localhost:8000/api/cats/' + name);
+  sendRecipeFetch(id: string) {
+    const params = new HttpParams().set('token', localStorage.getItem('jwt'));
+    return this.http.get(`http://127.0.0.1:3000/recept/${id}`, {params});
   }
 }

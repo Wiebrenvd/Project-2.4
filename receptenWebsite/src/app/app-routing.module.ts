@@ -7,6 +7,7 @@ import { ReceptenDelenComponent } from './recepten-delen/recepten-delen.componen
 import { CategorieComponent } from './categorie/categorie.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import {ResultComponent} from "./result/result.component";
 
 
 
@@ -14,15 +15,16 @@ const routes: Routes = [
   {path: 'home', component: HomePageComponent},
   {path: 'boodschappenlijstje', component: BoodschappenlijstComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'recept', component: ReceptenPaginaComponent},
+  {path: 'recept/:id', component: ReceptenPaginaComponent},
   {path: 'receptDelen', component: ReceptenDelenComponent},
   {path: 'categorie', component: CategorieComponent},
   {path: 'registreren', component: RegisterComponent},
-  {path: 'inloggen', component: LoginComponent}
+  {path: 'inloggen', component: LoginComponent},
+  {path: 'resultaat/:searchString', component: ResultComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {onSameUrlNavigation: 'reload'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
