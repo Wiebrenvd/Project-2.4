@@ -34,9 +34,6 @@ export class ReceptenPaginaComponent implements OnInit {
   }
 
   private createViews(recipe: any) {
-    if (recipe.token) {
-      localStorage.setItem('jwt', recipe.token);
-    }
     this.name = recipe.name;
     this.description = recipe.desc;
     for (const ingredient of recipe.ingredients) {

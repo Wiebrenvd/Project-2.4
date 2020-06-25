@@ -51,13 +51,11 @@ app.get('/login', (req, res) => {
     if (err) {
       console.log(err);
     }
-
     if (data.length > 0) {
       if (req.query.password === data[0].pass) {
         send(res, createJWT(data[0].id, data[0].email));
       }
     }
-
     sendStatus(res, 401);
 
   });
@@ -65,7 +63,6 @@ app.get('/login', (req, res) => {
 
 function checkJWT(req) {
   const token = jwt.verify(req.query.token, privateKey);
-
   return {id: token.id, email: token.email};
 }
 
@@ -77,6 +74,26 @@ function send(res, str) {
   res.send(str);
 }
 
+function createNewJWTIfReceived(req, res) {
+  try {
+    if (req.query.token) {
+      const fields = checkJWT(req);
+      return createJWT(fields.id, fields.email);
+    } else {
+      return null;
+    }
+  } catch (err) {
+    console.error(err.name);
+    if (err.name !== 'TokenExpiredError') {
+      sendStatus(res, 401);
+      console.error(err);
+    } else {
+      const fields = checkJWT(req);
+      return createJWT(fields.id, fields.email);
+    }
+  }
+}
+
 app.get('/recept/:id', (req, res) => {
   const response = {
     token: undefined,
@@ -86,30 +103,20 @@ app.get('/recept/:id', (req, res) => {
     picture: undefined
 
   };
-  try {
-    if (req.query.token) {
-      const fields = checkJWT(req);
-      response.token = createJWT(fields.id, fields.email);
-    }
-  } catch (err) {
-    if (err.name !== 'TokenExpiredError') {
-      sendStatus(res, 401);
-      console.error(err);
-    }
-  }
+
+  response.token = createNewJWTIfReceived(req, res);
+
   connection.query(`
   SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
 inner JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
 inner join ingredients as ing on rhi.ingredients_id = ing.id
 where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
 
-
     if (err) {
       console.log(err);
     }
 
     if (data.length > 0) {
-
       const ingredients = [];
       for (const jsonObj of data) {
 
@@ -125,17 +132,21 @@ where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
 });
 
 app.get('/zoek', (req, res) => {
+  const response = {
+    token: undefined,
+    recipes: []
+  };
+  response.token = createNewJWTIfReceived(req, res);
   connection.query(`SELECT * from recipes where name LIKE '%${req.query.searchString}%'`, (err, data) => {
     if (err) {
       console.log(err);
     }
     if (data.length > 0) {
-      const json = [];
-      for (const jsonObj of data) {
-        json.push(jsonObj);
-      }
 
-      send(res, JSON.stringify(json));
+      for (const jsonObj of data) {
+        response.recipes.push(jsonObj);
+      }
+      send(res, JSON.stringify(response));
     }
   });
 });

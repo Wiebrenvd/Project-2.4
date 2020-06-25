@@ -8,9 +8,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ConfigService} from '../config.service';
-import {Subscription} from "rxjs";
-import {SetTimerComponent} from "../set-timer/set-timer.component";
-import {RecipeResultComponent} from "../recipe-result/recipe-result.component";
+import {RecipeResultComponent} from '../recipe-result/recipe-result.component';
 
 @Component({
   selector: 'app-result',
@@ -49,10 +47,8 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  private createResultViews(recipes: any) {
-    if (recipes.token) {
-      localStorage.setItem('jwt', recipes.token);
-    }
+  private createResultViews(response: any) {
+    const recipes = response.recipes;
     for (const recipe of recipes) {
       this.addRecipe(this.recipeResultComponentClass, recipe);
     }

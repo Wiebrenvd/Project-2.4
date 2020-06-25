@@ -24,9 +24,6 @@ export class LoginComponent implements OnInit {
   }
 
 
-  saveJWT(jwt: string) {
-    localStorage.setItem('jwt', jwt);
-  }
 
   createForm() {
     this.reactiveForm = this.fb.group({
@@ -42,7 +39,6 @@ export class LoginComponent implements OnInit {
   }
 
   private loginSuccessful(jwt) {
-    this.saveJWT(jwt);
     this.router.navigate(['home']);
   }
 
