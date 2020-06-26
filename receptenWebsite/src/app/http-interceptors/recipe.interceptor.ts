@@ -1,33 +1,47 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor, HttpErrorResponse
+  HttpInterceptor, HttpErrorResponse, HttpResponse
 } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import 'rxjs/add/operator/do';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class RecipeInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Als een token is gestuurd, sla hem op.
-    if (req.params.get('token') != null) {
-      localStorage.setItem('jwt', req.params.get('token'));
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      request = request.clone({
+        headers: request.headers.set('Authorization', token)
+      });
     }
 
 
-    return next.handle(req).pipe(
-      catchError((err: HttpErrorResponse) => {
-        if (err.status === 401) { // Authenticatie error -> naar inlog scherm voor nieuw token
-          this.router.navigate(['inloggen']);
-        } else {
-          return throwError(err);
+    return next.handle(request).pipe(
+      tap(event => {
+        if (event instanceof HttpResponse) {
+          if (event.body.token != null) {
+            console.log('nieuwe token:' + event.body.token);
+
+            localStorage.setItem('jwt', event.body.token);
+          }
         }
+      }, error => {
+        console.error(error);
+        if (error.status === 401) {
+          this.router.navigate(['inloggen']);
+        }
+
+
       })
     );
   }

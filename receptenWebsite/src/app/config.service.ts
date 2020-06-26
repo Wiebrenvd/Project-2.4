@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpClient,
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpParams,
-  HttpRequest
+  HttpParams
 } from '@angular/common/http';
+import {Ingredient} from './ingredienten/ingredienten';
+
+import * as jwt_decode from 'jwt-decode';
 
 export interface Recept {
   name: string;
@@ -14,26 +13,49 @@ export interface Recept {
 
 @Injectable()
 export class ConfigService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-/*
-* na elke subscribe, bij een response, eerst checken naar jwt.
-* */
   sendLoginData(email: string, password: string) {
-    const params = new HttpParams().set('token', localStorage.getItem('jwt')).set('email', email).set('password', password);
-    const responseType = 'text';
-    return this.http.get('http://127.0.0.1:3000/login', {responseType, params});
+    const params = new HttpParams().set('email', email).set('password', password);
+    return this.http.post('http://127.0.0.1:3000/login', {params});
 
   }
 
   sendSearch(searchString: string) {
-    const params = new HttpParams().set('token', localStorage.getItem('jwt')).set('searchString', searchString);
+    const params = new HttpParams().set('searchString', searchString);
     return this.http.get('http://127.0.0.1:3000/zoek', {params});
   }
 
 
   sendRecipeFetch(id: string) {
-    const params = new HttpParams().set('token', localStorage.getItem('jwt'));
+    const params = new HttpParams();
     return this.http.get(`http://127.0.0.1:3000/recept/${id}`, {params});
+  }
+
+  fetchBoodschappenlijst() {
+    const params = new HttpParams();
+    return this.http.get(`http://127.0.0.1:3000/boodschappenlijstje`, {params});
+  }
+
+  deleteBoodschappenlijst(id: string) {
+    const params = new HttpParams();
+    return this.http.delete(`http://127.0.0.1:3000/boodschappenlijstje/${id}`, {params});
+  }
+
+  sendBoodschappenlijst(ingredientName: string, amount: string) {
+    const params = new HttpParams().set('ingredientName', ingredientName).set('ingredientAmount', amount);
+    return this.http.put('http://127.0.0.1:3000/boodschappenlijstje', {params});
+  }
+
+  fetchIngredients() {
+    const params = new HttpParams();
+    return this.http.get('http://127.0.0.1:3000/ingredients', {params});
+  }
+
+
+  register(username: string, email: string, password: string) {
+    const params = new HttpParams().set('username', username).set('email', email).set('password', password);
+    return this.http.post('http://127.0.0.1:3000/register', {params});
   }
 }

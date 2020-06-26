@@ -8,7 +8,7 @@
       {{ingredient.amount}}
     </div>
     <div class="col-md-2">
-      <button type="button" class="btn btn-primary" (click)="verwijderen(ingredient.name)">X</button>
+      <button type="button" class="btn btn-primary" (click)="verwijderen(ingredient.id)">X</button>
     </div>
   </div>
 </div>
@@ -17,11 +17,20 @@
     <form>
       <div class="form-row">
         <div class="col">
-          <input ngModel name="name" #name="ngModel" id="name" type="text" placeholder="eten bv: eieren">
+          <select style="width:100%" ngModel name="name" #name="ngModel">
+            <option value="" disabled selected>Voeg nieuw ingredient toe</option>
+            <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
+              {{ingredient}}
+            </option>
+
+          </select>
         </div>
         <div class="col">
           <input ngModel name="amount" #amount="ngModel" id="amount" type="text" placeholder="hoeveel bv: 1l">
         </div>
+
+      </div>
+      <div class="form-row">
         <div class="col">
           <button type="submit" class="btn btn-primary" (click)="toevoegen(name, amount)">toevoegen</button>
         </div>

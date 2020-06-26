@@ -34,11 +34,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.configService.sendLoginData(this.reactiveForm.value.email, sha1(this.reactiveForm.value.password)).subscribe(
-        jwt => this.loginSuccessful(jwt),
+        (jwt) => this.loginSuccessful(jwt),
       error => console.log(error.message));
   }
 
   private loginSuccessful(jwt) {
+    localStorage.setItem('jwt', jwt);
+    // console.log(localStorage.getItem('jwt'));
     this.router.navigate(['home']);
   }
 

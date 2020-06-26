@@ -1,9 +1,8 @@
 import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
-import {IngredientenService} from '../ingredienten.service';
 import {Timer} from '../timer/timer';
 import {ActivatedRoute} from '@angular/router';
-import {ConfigService} from "../config.service";
+import {ConfigService} from '../config.service';
 
 @Component({
   selector: 'app-recepten-pagina',
@@ -38,7 +37,7 @@ export class ReceptenPaginaComponent implements OnInit {
     this.description = recipe.desc;
     for (const ingredient of recipe.ingredients) {
       console.log(ingredient);
-      this.ingredients.push(new Ingredient(ingredient.name, ingredient.amount));
+      this.ingredients.push(new Ingredient(ingredient.id, ingredient.name, ingredient.amount));
     }
     this.image = recipe.picture;
   }

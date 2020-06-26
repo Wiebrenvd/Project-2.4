@@ -21,15 +21,14 @@ import { BereidingswijzeComponent } from './bereidingswijze/bereidingswijze.comp
 import { SetTimerComponent } from './set-timer/set-timer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { IngredientenServiceComponent } from './ingredienten-service/ingredienten-service.component';
 import { TimerComponent } from './timer/timer.component';
 import {HttpClientModule} from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import {ConfigService} from "./config.service";
+import {ConfigService} from './config.service';
 import { ResultComponent } from './result/result.component';
 import { RecipeResultComponent } from './recipe-result/recipe-result.component';
-import {httpInterceptorProviders} from "./http-interceptors";
+import {httpInterceptorProviders} from './http-interceptors';
 
 @NgModule({
   declarations: [
@@ -50,7 +49,6 @@ import {httpInterceptorProviders} from "./http-interceptors";
     ReceptenInHuisComponent,
     BereidingswijzeComponent,
     SetTimerComponent,
-    IngredientenServiceComponent,
     TimerComponent,
     ResultComponent,
     RecipeResultComponent
