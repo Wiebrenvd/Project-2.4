@@ -166,6 +166,7 @@ app.post('/login', (req, res) => {
     email: undefined,
     password: undefined
   };
+
   for (const update of req.body.params.updates) {
     switch (update.param) {
       case 'email':
@@ -188,8 +189,11 @@ app.post('/login', (req, res) => {
         res.send(JSON.stringify(createJWT(data[0].id)));
         return;
       }
+    } else {
+      res.sendStatus(401);
     }
-    res.send(401);
+
+
 
   });
 });
@@ -216,7 +220,7 @@ app.get('/ingredients', (req, res) => {
   connection.query(`select name from ingredients`, (err, data) => {
     if (err) {
       console.log(err);
-      res.send(400);
+      res.sendStatus(400);
       return;
     }
     if (data.length > 0) {
@@ -233,6 +237,29 @@ app.get('/ingredients', (req, res) => {
 });
 
 
+app.get('/verify', (req, res) => {
+
+  const response = {
+    token: undefined
+  };
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+    response.token = createJWT(reqToken.sub);
+    res.send(JSON.stringify(response));
+    return;
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(400);
+    return;
+  }
+
+
+
+
+});
+
 app.put('/boodschappenlijstje', (req, res) => {
   const params = {
     ingredientAmount: undefined,
@@ -248,8 +275,15 @@ app.put('/boodschappenlijstje', (req, res) => {
         break;
     }
   }
+  let reqToken = '';
+  try {
 
-  const reqToken = jwt.verify(req.headers.authorization, privateKey);
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
 
   const response = {
     token: undefined,
@@ -295,6 +329,7 @@ app.get('/boodschappenlijstje', (req, res) => {
 
   let reqToken = '';
   try {
+
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);
@@ -315,7 +350,7 @@ join ingredients on shoppinglist.ingredients_id = ingredients.id
 where users.id = ${reqToken.sub}`, (err, data) => {
     if (err) {
       console.log(err);
-      res.send(400);
+      res.sendStatus(400);
       return;
     }
     if (data.length > 0) {
@@ -349,13 +384,12 @@ app.delete('/boodschappenlijstje/:id', (req, res) => {
     id: undefined
   };
   response.token = createJWT(reqToken.sub);
-  console.log(req.params.id);
   response.id = req.params.id;
 
   connection.query(`DELETE from shoppinglist where id = ${req.params.id};`, (err, data) => {
     if (err) {
       console.log(err);
-      res.send(400);
+      res.sendStatus(400);
       return;
     }
     res.send(JSON.stringify(response));

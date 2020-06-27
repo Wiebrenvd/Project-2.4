@@ -1,7 +1,6 @@
 import {
   Component,
-  ComponentFactoryResolver,
-  ComponentRef, EventEmitter,
+  ComponentFactoryResolver, EventEmitter,
   OnInit, Output, Type,
   ViewChild,
   ViewContainerRef
@@ -19,6 +18,7 @@ export class BereidingswijzeComponent implements OnInit {
 
   @ViewChild('timerDiv', {read: ViewContainerRef}) container: ViewContainerRef;
 
+  @Output() open: EventEmitter<any> = new EventEmitter();
 
   // Keep track of list of generated components for removal purposes
   timerComponents = [];
