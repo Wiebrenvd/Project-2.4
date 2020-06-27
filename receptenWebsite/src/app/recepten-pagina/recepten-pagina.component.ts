@@ -25,6 +25,7 @@ export class ReceptenPaginaComponent implements OnInit {
     this.ingredients = [];
     this.timers = [];
     this.id = this.route.snapshot.paramMap.get('id');
+    this.id = '1';
 
     this.configService.sendRecipeFetch(this.id).subscribe(
       res => this.createViews(res),
