@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
   }
 
   setLoggedIn(b: boolean) {
-    console.log(b);
     this.loggedIn = b;
   }
 

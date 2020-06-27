@@ -62,11 +62,7 @@ export class SetTimerComponent implements OnInit {
   }
 
 
-  getData(): Map<string, number> {
-    const map = new Map<string, number>();
-    map.set('id', this.timerId);
-    map.set('minutes', this.minutes);
-    map.set('seconds', this.seconds);
-    return map;
+  getData(): number {
+    return (this.minutes * 60) + this.seconds;
   }
 }

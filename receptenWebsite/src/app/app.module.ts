@@ -8,7 +8,6 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ReceptenDelenComponent } from './recepten-delen/recepten-delen.component';
 import { ReceptenPaginaComponent } from './recepten-pagina/recepten-pagina.component';
 import { AlInHuisComponent } from './al-in-huis/al-in-huis.component';
-import { BoodschappenlijstjeComponent } from './boodschappenlijstje/boodschappenlijstje.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { IngredientenComponent } from './ingredienten/ingredienten.component';
@@ -38,7 +37,6 @@ import {httpInterceptorProviders} from './http-interceptors';
     ReceptenDelenComponent,
     ReceptenPaginaComponent,
     AlInHuisComponent,
-    BoodschappenlijstjeComponent,
     RegisterComponent,
     LoginComponent,
     IngredientenComponent,
