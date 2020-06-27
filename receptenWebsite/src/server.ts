@@ -60,8 +60,8 @@ app.get('/recept/:id', (req, res) => {
     ingredients: {},
     name: undefined,
     desc: undefined,
-    picture: undefined
-
+    picture: undefined,
+    timers: undefined
   };
 
   let reqToken = '';
@@ -76,9 +76,9 @@ app.get('/recept/:id', (req, res) => {
 
   connection.query(`
    SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.id as ingredient_id, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
-left JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
-left join ingredients as ing on rhi.ingredients_id = ing.id
- where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
+   left JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
+   left join ingredients as ing on rhi.ingredients_id = ing.id
+   where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
     if (err) {
       console.log(err);
     }
@@ -98,15 +98,26 @@ left join ingredients as ing on rhi.ingredients_id = ing.id
       response.desc = data[0].recipe_desc;
       response.picture = data[0].recipe_picture;
 
-
       connection.query(`update recipes set clicks=clicks+1 where id = ${data[0].recipe_id}`, (err2, data2) => {
         if (err2) {
           console.log(err2);
         }
       });
 
+      connection.query(`SELECT seconds from timers where timers.recipes_id = ${parseInt(req.params.id, 10)};`, (err3, data3) => {
+        if (err3) {
+          console.log(err3);
+        }
+        const timers = [];
+        if (data3.length > 0) {
+          for (const jsonObj of data3) {
+            timers.push(jsonObj.seconds);
+          }
+        }
+        response.timers = timers;
+        res.send(JSON.stringify(response));
+      });
 
-      res.send(JSON.stringify(response));
     }
   });
 });

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {ConfigService} from '../config.service';
 import {NgModel} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-boodschappenlijst',
@@ -15,10 +15,16 @@ export class BoodschappenlijstComponent implements OnInit {
 
   allIngredients: Ingredient[];
 
-  constructor(private router: Router, private configService: ConfigService) {
+  constructor(private route: ActivatedRoute, private router: Router, private configService: ConfigService) {
   }
 
   ngOnInit(): void {
+    if (this.route.snapshot.params === undefined) {
+      //this.router.navigate(['boodschappenlijstje']);
+    } else {
+      this.receptToevoegen();
+    }
+
     this.boodschappenlijst = [];
     this.allIngredients = [];
     this.configService.fetchBoodschappenlijst().subscribe(
@@ -31,6 +37,22 @@ export class BoodschappenlijstComponent implements OnInit {
 
   }
 
+  receptToevoegen() {
+    let ingredients;
+    const ingredientMap = this.route.snapshot.params;
+    ingredients = ingredientMap.ing;
+    if (ingredients === undefined) {
+
+    } else {
+      const listofIngriedents = ingredients.split('/');
+      for (const ing of listofIngriedents) {
+        const item = ing.split(':');
+        this.configService.sendBoodschappenlijst(item[0], item[1]).subscribe(
+          res => this.addView(res),
+          error => console.log(error.message));
+      }
+    }
+  }
 
   verwijderen(id): void {
     console.log(this.boodschappenlijst);
