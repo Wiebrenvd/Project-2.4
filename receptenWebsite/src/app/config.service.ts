@@ -70,8 +70,8 @@ export class ConfigService {
     return this.http.get('http://127.0.0.1:3000/popular', {params});
   }
 
-  sendNewRecipe(name: any, bereidingswijze: any, ingredienten: any, timers: any) {
-    const params = new HttpParams().set('name', name).set('desc', bereidingswijze).set('ingredients', ingredienten).set('timers', timers);
+  sendNewRecipe(name: any, bereidingswijze: any, ingredienten: any, timers: any, image: any) {
+    const params = new HttpParams().set('name', name).set('desc', bereidingswijze).set('ingredients', ingredienten).set('timers', timers).set('image', image);
     return this.http.post('http://127.0.0.1:3000/upload', {params});
   }
 }

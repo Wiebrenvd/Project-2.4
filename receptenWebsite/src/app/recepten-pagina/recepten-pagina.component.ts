@@ -13,7 +13,7 @@ export class ReceptenPaginaComponent implements OnInit {
 
   ingredients: Ingredient[];
   timers: Timer[];
-  image: any;
+  image: string;
   private id: string;
   name: string;
   description: any;
@@ -36,14 +36,25 @@ export class ReceptenPaginaComponent implements OnInit {
   private createViews(recipe: any) {
 
 
+    console.log(recipe);
     this.name = recipe.name;
     this.description = recipe.desc;
-    this.image = recipe.picture;
-    for (const ingredient of recipe.ingredients) {
-      this.ingredients.push(new Ingredient(ingredient.id, ingredient.name, ingredient.amount));
+    if (recipe.image === null) {
+
+      this.image = 'assets/placeholder.jpg';
+    } else {
+      this.image = recipe.image;
     }
-    for (const timer of recipe.timers) {
-      this.timers.push(new Timer(timer.id, timer.seconds));
+
+
+    for (const ingredient of recipe.ingredients) {
+      const ingredientObject = new Ingredient(ingredient.id, ingredient.name);
+      this.ingredients.push(ingredientObject);
+    }
+    if (recipe.timers) {
+      for (const timer of recipe.timers) {
+        this.timers.push(new Timer(timer.id, timer.seconds));
+      }
     }
   }
 

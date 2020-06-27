@@ -22,9 +22,6 @@ export class PopulaireReceptenComponent implements OnInit {
       error => console.error(error.message));
   }
 
-  submit(recipe: number) {
-    this.router.navigate(['recept', recipe]);
-  }
 
   private addRecipes(res: any) {
     for (const recipe of res.recipes) {

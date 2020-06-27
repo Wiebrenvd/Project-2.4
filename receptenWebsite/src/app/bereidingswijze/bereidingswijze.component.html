@@ -1,16 +1,22 @@
 <div class="container border body">
 
   <div class="row header border-bottom">
-    <h6 class="text-center full-width">Bereidingswijze</h6>
+    <h6 class="text-center full-width">Omschrijving</h6>
   </div>
 
   <div class="row">
     <div class="row-body">
-      <label for="name">Receptnaam
+      <label for="name">Receptnaam<br>
         <input id="name" type="text" (input)="name = $event.target.value">
       </label>
     </div>
-
+  </div>
+  <div class="row">
+    <div class="row-body">
+      <label for="image">Afbeelding (JPG, JPEG, PNG)<br>
+        <input id="image" type="text" (input)="this.image = $event.target.value;">
+      </label>
+    </div>
   </div>
   <div class="row">
     <div class="row-body">

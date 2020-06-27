@@ -27,6 +27,8 @@ export class BereidingswijzeComponent implements OnInit {
 
   name = '';
 
+  image: '';
+
   setTimerComponentClass = SetTimerComponent;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
@@ -73,7 +75,19 @@ export class BereidingswijzeComponent implements OnInit {
     }
   }
 
+  getImage() {
+    if (this.bereidingswijze.length <= 0 ) {
+      return null;
+    } else if (!this.image.match(/\.(jpeg|jpg|png)$/)) {
+      throw new Error('Geen geldige afbeelding!');
+    }
+
+    return this.image;
+  }
+
+
   // Returnt een array met maps van de timers.
+
   getTimerData() {
     const data = [];
 
@@ -86,5 +100,4 @@ export class BereidingswijzeComponent implements OnInit {
     }
     return data;
   }
-
 }

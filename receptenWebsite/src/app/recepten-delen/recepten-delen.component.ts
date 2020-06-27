@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {BereidingswijzeComponent} from '../bereidingswijze/bereidingswijze.component';
 import {IngredientenComponent} from '../ingredienten/ingredienten.component';
 import {ConfigService} from '../config.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-recepten-delen',
@@ -27,10 +27,15 @@ export class ReceptenDelenComponent implements OnInit {
   submit() {
     this.error = null;
     // Clear warning
-    let name, bereidingswijze, ingredienten, timers;
+
+    // tslint:disable-next-line:one-variable-per-declaration
+    let name, bereidingswijze, ingredienten, timers, image;
     try {
 
+      image = this.bereidingsWijze.getImage();
+
       name = this.bereidingsWijze.getName();
+
       bereidingswijze = this.bereidingsWijze.getBereidingswijze(); // Verkrijg textarea data
 
       ingredienten = this.ingredientenComponent.getIngredienten();
@@ -42,7 +47,7 @@ export class ReceptenDelenComponent implements OnInit {
       this.showErrorPopup(error);
       return;
     }
-    this.configService.sendNewRecipe(name, bereidingswijze, ingredienten, timers).subscribe(
+    this.configService.sendNewRecipe(name, bereidingswijze, ingredienten, timers, image).subscribe(
       (res) => this.uploadSuccessful(res),
       error => console.log(error.message));
 

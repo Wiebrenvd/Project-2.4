@@ -60,8 +60,7 @@ app.get('/recept/:id', (req, res) => {
     ingredients: {},
     name: undefined,
     desc: undefined,
-    picture: undefined
-
+    image: undefined
   };
 
   let reqToken = '';
@@ -96,7 +95,7 @@ left join ingredients as ing on rhi.ingredients_id = ing.id
       response.ingredients = ingredients;
       response.name = data[0].recipe_name;
       response.desc = data[0].recipe_desc;
-      response.picture = data[0].recipe_picture;
+      response.image = data[0].recipe_picture;
 
 
       connection.query(`update recipes set clicks=clicks+1 where id = ${data[0].recipe_id}`, (err2, data2) => {
@@ -234,7 +233,8 @@ app.post('/upload', (req, res) => {
     timers: undefined,
     desc: undefined,
     name: undefined,
-    id: undefined
+    id: undefined,
+    image: undefined
   };
 
   for (const update of req.body.params.updates) {
@@ -250,6 +250,14 @@ app.post('/upload', (req, res) => {
         break;
       case 'timers':
         updates.timers = update.value;
+        break;
+      case 'image':
+        if (!update.value) {
+          updates.image = null;
+        } else {
+          updates.image = update.value;
+        }
+
         break;
     }
   }
@@ -270,8 +278,7 @@ app.post('/upload', (req, res) => {
   };
   response.token = createJWT(reqToken.sub);
 
-
-  connection.query(`insert into recipes (recipes.name,recipes.desc,recipes.clicks) values ('${updates.name}', '${updates.desc}', 0)`, (err, data) => {
+  connection.query(`insert into recipes (recipes.name,recipes.desc,recipes.clicks, recipes.picture) values ('${updates.name}', '${updates.desc}', 0, '${updates.image}')`, (err, data) => {
     if (err) {
       console.log(err);
     }
@@ -282,8 +289,6 @@ app.post('/upload', (req, res) => {
       }
 
 
-      updates.id = data3[0].id;
-      console.log(updates.id);
       response.id = data3[0].id;
 
       console.log(data3[0].id);
@@ -291,7 +296,7 @@ app.post('/upload', (req, res) => {
 
       let valuesArray = [];
       for (const ingredient of updates.ingredients) {
-        valuesArray.push(`(${updates.id}, ${ingredient.id}, ${ingredient.amount})`);
+        valuesArray.push(`(${response.id}, ${ingredient.id}, ${ingredient.amount})`);
       }
       let queryValues = valuesArray.join(',');
 

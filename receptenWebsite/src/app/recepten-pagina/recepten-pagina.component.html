@@ -1,14 +1,23 @@
 <div class="container-fluid">
   <div class="row md-3">
+
     <div class="col-md-6">
-        <div class="border" style="word-wrap: break-word">
+      <div class="border">
+        <img width="100%" [src]="image">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="border" style="word-wrap: break-word">
         <h5>{{name}}</h5>
         <p>{{description}}</p>
       </div>
     </div>
+  </div>
+  <br>
+  <div class="row md-3">
     <div class="col-md-6">
       <div class="border">
-        <h5>ingredienten lijst</h5>
+        <h5>Ingrediënten</h5>
         <ul>
           <li *ngFor="let ingredient of ingredients">
             {{ ingredient.amount }} {{ingredient.name}}
@@ -19,22 +28,13 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row md-3">
 
 
-    <div class="col-md-6">
-      <div class="border">
-        <h5>afbeelding recept</h5>
-        <img
-          [src]="image"
-          width="60%" height="60%">
-      </div>
-    </div>
+
 
 
     <div class="col-md-6">
-      <div class="border">
+      <div *ngIf="this.timers.length > 0" class="border">
 
         <h5>Timers</h5>
         <div class="container-fluid">

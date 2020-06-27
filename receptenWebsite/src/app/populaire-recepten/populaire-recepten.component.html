@@ -6,7 +6,7 @@
 
     <ol>
       <li *ngFor="let recipe of popularRecipes">
-        <a (click)="submit(recipe.id)">{{ recipe.name + ' - ' + recipe.clicks }}</a>
+        <a href="/recept/{{recipe.id}}">{{ recipe.name + ' - ' + recipe.clicks }}</a>
       </li>
     </ol>
 
