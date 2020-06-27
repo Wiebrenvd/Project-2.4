@@ -58,4 +58,11 @@ export class ConfigService {
     const params = new HttpParams().set('username', username).set('email', email).set('password', password);
     return this.http.post('http://127.0.0.1:3000/register', {params});
   }
+
+
+  verifyJWT() {
+    const params = new HttpParams();
+    return this.http.get('http://127.0.0.1:3000/verify', {params});
+  }
+
 }

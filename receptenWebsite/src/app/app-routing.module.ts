@@ -7,7 +7,7 @@ import { ReceptenDelenComponent } from './recepten-delen/recepten-delen.componen
 import { CategorieComponent } from './categorie/categorie.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import {ResultComponent} from "./result/result.component";
+import {ResultComponent} from './result/result.component';
 
 
 

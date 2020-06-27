@@ -1,5 +1,6 @@
 /* Page: */
 .header {
+  background-color:gray;
 }
 
 .categorybar {
@@ -21,9 +22,20 @@
   background-color:gray;
 }
 
+.body-container {
+  padding-right: 0px;
+  padding-left: 0px;
+  overflow-x: hidden;
+}
+
 /* Extra: */
 .no-padding {
   padding:0;
+}
+
+
+.align-middle {
+  float: top;
 }
 
 .align-right {

@@ -12,27 +12,28 @@
 
 </head>
 
-<body class="container-fluid">
+<body>
+<div class="container-fluid body-container">
 
 <!--Header-->
-<div class="header">
+<div class="header ">
   <!--Navigation Bar-->
-  <div class="row nav-bar">
-    <div class="col-md-4">
-      <h1>LOGO</h1>
+  <div class="row ">
+    <div class="col-md-4 ">
+      <h1>Recipeworld</h1>
     </div>
     <div class="col-md-8">
 
       <div class="full-height align-right">
         <nav class="full-height">
-          <button class="full-height" routerLink="/home"> home</button>
-          <button class="full-height" routerLink="/boodschappenlijstje"> boodschappenlijstje
-          </button>
-          <button class="full-height" routerLink="/recept"> recept</button>
-          <button class="full-height" routerLink="/receptDelen"> recept delen</button>
-          <button class="full-height" routerLink="/categorie"> categorie</button>
-          <button class="full-height" routerLink="/registreren"> registreren</button>
-          <button class="full-height" routerLink="/inloggen"> inloggen</button>
+          <button class="full-height btn btn-primary"  routerLink="/home"> home</button>
+          <button class="full-height btn btn-primary" *ngIf="loggedIn" routerLink="/boodschappenlijstje"> boodschappenlijstje</button>
+          <button class="full-height btn btn-primary" routerLink="/recept"> recept</button>
+          <button class="full-height btn btn-primary" routerLink="/receptDelen"> recept delen</button>
+          <button class="full-height btn btn-primary" routerLink="/categorie"> categorie</button>
+          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/registreren"> registreren</button>
+          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/inloggen"> inloggen</button>
+          <button class="full-height btn btn-primary" *ngIf="loggedIn" (click)="this.logout()"> uitloggen</button>
         </nav>
       </div>
     </div>
@@ -46,9 +47,9 @@
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8 full-height app-body">
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="checkIfJWTValid()" ></router-outlet>
   </div>
-  <div class="col-md-2"></div>
+<!--  <div class="col-md-2"></div>-->
 </div>
 
 <!--Body End-->
@@ -58,6 +59,6 @@
 </div>
 <!--Footer end-->
 
-
+</div>
 </body>
 </html>
