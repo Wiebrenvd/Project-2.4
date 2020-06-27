@@ -38,11 +38,13 @@ export class ReceptenPaginaComponent implements OnInit {
 
     this.name = recipe.name;
     this.description = recipe.desc;
+    this.image = recipe.picture;
     for (const ingredient of recipe.ingredients) {
-      console.log(ingredient);
       this.ingredients.push(new Ingredient(ingredient.id, ingredient.name, ingredient.amount));
     }
-    this.image = recipe.picture;
+    for (const timer of recipe.timers) {
+      this.timers.push(new Timer(timer.id, timer.seconds));
+    }
   }
 
   addToBoodschappen() {

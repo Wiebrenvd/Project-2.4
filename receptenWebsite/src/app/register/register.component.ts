@@ -11,6 +11,7 @@ import * as sha1 from 'js-sha1';
 })
 export class RegisterComponent implements OnInit {
   reactiveForm: FormGroup;
+  errorMessage: string;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +34,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.configService.register(this.reactiveForm.get('name').value, this.reactiveForm.get('email').value, sha1(this.reactiveForm.get('password').value)).subscribe(
       res => this.registerSuccessful(res),
-      error => console.error(error.message));
+      error => this.errorMessage = 'Gebruikersnaam of email is al in gebruik');
   }
 
   get name() {
