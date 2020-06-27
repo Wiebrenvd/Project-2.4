@@ -72,7 +72,7 @@ export class IngredientenComponent implements OnInit {
   private addIngredients(res: any) {
 
     for (const ingredient of res.ingredients) {
-      this.allIngredients.push(new Ingredient(ingredient.id, ingredient.name));
+      this.allIngredients.push(new Ingredient(ingredient.id, ingredient.name, ingredient.amount));
     }
 
   }

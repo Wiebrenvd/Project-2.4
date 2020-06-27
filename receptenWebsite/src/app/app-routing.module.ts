@@ -20,7 +20,8 @@ const routes: Routes = [
   {path: 'categorie', component: CategorieComponent},
   {path: 'registreren', component: RegisterComponent},
   {path: 'inloggen', component: LoginComponent},
-  {path: 'resultaat/:searchString', component: ResultComponent}
+  {path: 'resultaat/:searchString', component: ResultComponent},
+  {path: 'boodschappenlijstje/:ing', component: BoodschappenlijstComponent}
 ];
 
 @NgModule({

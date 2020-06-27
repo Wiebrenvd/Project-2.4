@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {ConfigService} from '../config.service';
 import {NgModel} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-boodschappenlijst',
@@ -15,10 +15,16 @@ export class BoodschappenlijstComponent implements OnInit {
 
   allIngredients: Ingredient[];
 
-  constructor(private router: Router, private configService: ConfigService) {
+  constructor(private route: ActivatedRoute, private router: Router, private configService: ConfigService) {
   }
 
   ngOnInit(): void {
+    if (this.route.snapshot.params === undefined) {
+      //this.router.navigate(['boodschappenlijstje']);
+    } else {
+      this.receptToevoegen();
+    }
+
     this.boodschappenlijst = [];
     this.allIngredients = [];
     this.configService.fetchBoodschappenlijst().subscribe(
@@ -31,6 +37,22 @@ export class BoodschappenlijstComponent implements OnInit {
 
   }
 
+  receptToevoegen() {
+    let ingredients;
+    const ingredientMap = this.route.snapshot.params;
+    ingredients = ingredientMap.ing;
+    if (ingredients === undefined) {
+    } else {
+      console.log(ingredients);
+      const listofIngriedents = ingredients.split('/');
+      for (const ing of listofIngriedents) {
+        const item = ing.split(':');
+        this.configService.sendBoodschappenlijst(item[0], item[1]).subscribe(
+          res => this.addView(res),
+          error => console.log(error.message));
+      }
+    }
+  }
 
   verwijderen(id): void {
     console.log(this.boodschappenlijst);
@@ -47,9 +69,8 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   private createResultViews(response: any) {
-    console.log(response);
     for (const responseIngredient of response.ingredients) {
-      const ingredient = new Ingredient(responseIngredient.id, responseIngredient.name);
+      const ingredient = new Ingredient(responseIngredient.id, responseIngredient.name, responseIngredient.amount);
       ingredient.setAmount(responseIngredient.amount);
       this.boodschappenlijst.push(ingredient);
     }
@@ -57,14 +78,13 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   private addView(response: any) {
-    const ingredient = new Ingredient(response.ingredientId, response.ingredientName);
+    const ingredient = new Ingredient(response.ingredientId, response.ingredientName, response.ingredientAmount);
     ingredient.setAmount(response.ingredientAmount);
     this.boodschappenlijst.push(ingredient);
   }
 
 
   private deleteView(res: any) {
-    console.log(res.id);
 
     let ingredient: Ingredient;
     let i = 0;

@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {Timer} from '../timer/timer';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ConfigService} from '../config.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ReceptenPaginaComponent implements OnInit {
   name: string;
   description: any;
 
-  constructor(private configService: ConfigService, private route: ActivatedRoute) {
+  constructor(private router: Router, private configService: ConfigService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -36,7 +36,6 @@ export class ReceptenPaginaComponent implements OnInit {
   private createViews(recipe: any) {
 
 
-    console.log(recipe);
     this.name = recipe.name;
     this.description = recipe.desc;
     if (recipe.image === null) {
@@ -48,9 +47,10 @@ export class ReceptenPaginaComponent implements OnInit {
 
 
     for (const ingredient of recipe.ingredients) {
-      const ingredientObject = new Ingredient(ingredient.id, ingredient.name);
+      const ingredientObject = new Ingredient(ingredient.id, ingredient.name, ingredient.amount);
       this.ingredients.push(ingredientObject);
     }
+
     if (recipe.timers) {
       for (const timer of recipe.timers) {
         this.timers.push(new Timer(timer.id, timer.seconds));
@@ -59,6 +59,17 @@ export class ReceptenPaginaComponent implements OnInit {
   }
 
   addToBoodschappen() {
+    this.router.navigate(['boodschappenlijstje', this.getIngredientsMap()]);
+  }
 
+  private getIngredientsMap() {
+    let ingredients = '';
+    console.log(this.ingredients);
+
+    for (const ingredient of this.ingredients) {
+      ingredients = ingredients + ingredient.name + ':' + ingredient.amount + '/';
+    }
+
+    return ingredients;
   }
 }
