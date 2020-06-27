@@ -53,46 +53,55 @@ function createJWT(id) {
 
 
 
+app.get('/recept/:id', (req, res) => {
 
-// app.get('/recept/:id', (req, res) => {
-//   const response = {
-//     token: undefined,
-//     ingredients: {},
-//     name: undefined,
-//     desc: undefined,
-//     picture: undefined
-//
-//   };
-//
-//   response.token = verifyJWT(req, res);
-//
-//   connection.query(`
-//   SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.id as ingredient_id, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
-// inner JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
-// inner join ingredients as ing on rhi.ingredients_id = ing.id
-// where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
-//
-//     if (err) {
-//       console.log(err);
-//     }
-//
-//     if (data.length > 0) {
-//       const ingredients = [];
-//       for (const jsonObj of data) {
-//         ingredients.push({
-//           id: jsonObj.ingredient_id,
-//           name: jsonObj.ingredient_name,
-//           amount: jsonObj.amount
-//         });
-//       }
-//       response.ingredients = ingredients;
-//       response.name = data[0].recipe_name;
-//       response.desc = data[0].recipe_desc;
-//       response.picture = data[0].recipe_picture;
-//       send(res, JSON.stringify(response));
-//     }
-//   });
-// });
+  const response = {
+    token: undefined,
+    ingredients: {},
+    name: undefined,
+    desc: undefined,
+    picture: undefined
+
+  };
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+  response.token = createJWT(reqToken.sub);
+
+  connection.query(`
+   SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.id as ingredient_id, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
+ inner JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
+ inner join ingredients as ing on rhi.ingredients_id = ing.id
+ where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
+
+    if (err) {
+      console.log(err);
+    }
+    console.log(data);
+    if (data.length > 0) {
+      const ingredients = [];
+      for (const jsonObj of data) {
+        ingredients.push({
+          id: jsonObj.ingredient_id,
+          name: jsonObj.ingredient_name,
+          amount: jsonObj.amount
+        });
+      }
+
+      response.ingredients = ingredients;
+      response.name = data[0].recipe_name;
+      response.desc = data[0].recipe_desc;
+      response.picture = data[0].recipe_picture;
+      res.send(JSON.stringify(response));
+    }
+  });
+});
 //
 // app.get('/zoek', (req, res) => {
 //   const response = {
@@ -300,7 +309,6 @@ app.put('/boodschappenlijstje', (req, res) => {
 
   response.ingredientName = params.ingredientName;
   response.ingredientAmount = params.ingredientAmount;
-
 
 
   const query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), ${params.ingredientAmount})`;
