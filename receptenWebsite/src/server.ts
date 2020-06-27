@@ -102,26 +102,38 @@ app.get('/recept/:id', (req, res) => {
     }
   });
 });
-//
-// app.get('/zoek', (req, res) => {
-//   const response = {
-//     token: undefined,
-//     recipes: []
-//   };
-//   response.token = verifyJWT(req, res);
-//   connection.query(`SELECT * from recipes where name LIKE '%${req.query.searchString}%'`, (err, data) => {
-//     if (err) {
-//       console.log(err);
-//     }
-//     if (data.length > 0) {
-//
-//       for (const jsonObj of data) {
-//         response.recipes.push(jsonObj);
-//       }
-//       send(res, JSON.stringify(response));
-//     }
-//   });
-// });
+
+app.get('/zoek', (req, res) => {
+  const response = {
+    token: undefined,
+    recipes: []
+  };
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+  response.token = createJWT(reqToken.sub);
+
+  connection.query(`SELECT * from recipes where name LIKE '%${req.query.searchString}%'`, (err, data) => {
+    if (err) {
+      console.log(err);
+    }
+    if (data.length > 0) {
+
+      for (const jsonObj of data) {
+        response.recipes.push(jsonObj);
+      }
+      res.send(JSON.stringify(response));
+    }else{
+      res.send(JSON.stringify("empty"));
+    }
+  });
+});
 
 
 app.post('/register', (req, res) => {
