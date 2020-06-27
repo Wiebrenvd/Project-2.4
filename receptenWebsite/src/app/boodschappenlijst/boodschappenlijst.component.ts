@@ -19,13 +19,7 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let params = this.route.snapshot.params;
-    console.log(params);
-    if (params === undefined) {
-    } else {
-      this.receptToevoegen(params.ing);
-      params = null;
-    }
+
 
     this.boodschappenlijst = [];
     this.allIngredients = [];
@@ -36,6 +30,15 @@ export class BoodschappenlijstComponent implements OnInit {
     this.configService.fetchIngredients().subscribe(
       res => this.addIngredients(res),
       error => console.log(error.message));
+
+    let params = this.route.snapshot.params;
+    console.log(params);
+    if (params === undefined) {
+    } else {
+      console.log('excuted');
+      this.receptToevoegen(params.ing);
+      params = null;
+    }
 
   }
 

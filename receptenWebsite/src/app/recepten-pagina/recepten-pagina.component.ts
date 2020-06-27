@@ -53,7 +53,7 @@ export class ReceptenPaginaComponent implements OnInit {
 
     if (recipe.timers) {
       for (const timer of recipe.timers) {
-        this.timers.push(new Timer(timer.id, timer.seconds));
+        this.timers.push(new Timer(timer.id, timer));
       }
     }
   }
