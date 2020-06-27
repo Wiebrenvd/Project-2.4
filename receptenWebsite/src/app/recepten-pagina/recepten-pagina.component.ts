@@ -1,7 +1,7 @@
 import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {Timer} from '../timer/timer';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ConfigService} from '../config.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ReceptenPaginaComponent implements OnInit {
   name: string;
   description: any;
 
-  constructor(private configService: ConfigService, private route: ActivatedRoute) {
+  constructor(private router: Router, private configService: ConfigService, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -43,11 +43,22 @@ export class ReceptenPaginaComponent implements OnInit {
       this.ingredients.push(new Ingredient(ingredient.id, ingredient.name, ingredient.amount));
     }
     for (const timer of recipe.timers) {
-      this.timers.push(new Timer(timer.id, timer.seconds));
+      console.log(timer);
+      this.timers.push(new Timer(timer.id, timer));
     }
   }
 
   addToBoodschappen() {
+    this.router.navigate(['boodschappenlijstje', this.getIngredientsMap()]);
+  }
 
+  private getIngredientsMap() {
+    let ingredients = '';
+
+    for (const ingredient of this.ingredients) {
+      ingredients = ingredients+ ingredient.name + ':' + ingredient.amount + '/';
+    }
+
+    return ingredients;
   }
 }
