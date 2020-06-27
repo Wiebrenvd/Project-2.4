@@ -64,12 +64,11 @@ export class ReceptenPaginaComponent implements OnInit {
 
   private getIngredientsMap() {
     let ingredients = '';
-    console.log(this.ingredients);
 
     for (const ingredient of this.ingredients) {
       ingredients = ingredients + ingredient.name + ':' + ingredient.amount + '/';
     }
-
+    console.log(ingredients);
     return ingredients;
   }
 }

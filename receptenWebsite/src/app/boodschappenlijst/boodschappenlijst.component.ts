@@ -19,10 +19,12 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.route.snapshot.params === undefined) {
-      //this.router.navigate(['boodschappenlijstje']);
+    let params = this.route.snapshot.params;
+    console.log(params);
+    if (params === undefined) {
     } else {
-      this.receptToevoegen();
+      this.receptToevoegen(params.ing);
+      params = null;
     }
 
     this.boodschappenlijst = [];
@@ -37,16 +39,19 @@ export class BoodschappenlijstComponent implements OnInit {
 
   }
 
-  receptToevoegen() {
-    let ingredients;
-    const ingredientMap = this.route.snapshot.params;
-    ingredients = ingredientMap.ing;
-    if (ingredients === undefined) {
+  receptToevoegen(ingredientString: string) {
+    if (ingredientString === undefined) {
     } else {
-      console.log(ingredients);
-      const listofIngriedents = ingredients.split('/');
-      for (const ing of listofIngriedents) {
+
+      if (ingredientString.substring(ingredientString.length - 1) === '/') {
+        ingredientString = ingredientString.substring(0, ingredientString.length - 1);
+      }
+
+      const listOfIngredients = ingredientString.split('/');
+      console.log(listOfIngredients);
+      for (const ing of listOfIngredients) {
         const item = ing.split(':');
+        console.log(item);
         this.configService.sendBoodschappenlijst(item[0], item[1]).subscribe(
           res => this.addView(res),
           error => console.log(error.message));
@@ -55,7 +60,6 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   verwijderen(id): void {
-    console.log(this.boodschappenlijst);
     this.configService.deleteBoodschappenlijst(id).subscribe(
       res => this.deleteView(res),
       error => console.log(error.message));
@@ -71,15 +75,14 @@ export class BoodschappenlijstComponent implements OnInit {
   private createResultViews(response: any) {
     for (const responseIngredient of response.ingredients) {
       const ingredient = new Ingredient(responseIngredient.id, responseIngredient.name, responseIngredient.amount);
-      ingredient.setAmount(responseIngredient.amount);
       this.boodschappenlijst.push(ingredient);
     }
 
   }
 
   private addView(response: any) {
+    console.log(response);
     const ingredient = new Ingredient(response.ingredientId, response.ingredientName, response.ingredientAmount);
-    ingredient.setAmount(response.ingredientAmount);
     this.boodschappenlijst.push(ingredient);
   }
 
@@ -91,7 +94,6 @@ export class BoodschappenlijstComponent implements OnInit {
 
     for (ingredient of this.boodschappenlijst) {
       if (ingredient.id === parseInt(res.id, 10)) {
-        console.log(`is ${ingredient.id} -> ${res.id} ?`);
         this.boodschappenlijst.splice(i, 1);
         break;
       }

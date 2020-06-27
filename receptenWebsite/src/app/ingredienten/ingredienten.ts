@@ -1,13 +1,11 @@
 export class Ingredient {
-  public amount: string;
 
   constructor(
     public id: number,
-    public name: string, amount: any) {
+    public name: string,
+    public amount: string
+  ) {
   }
 
-  setAmount(amount: string) {
-    this.amount = amount;
-  }
 
 }

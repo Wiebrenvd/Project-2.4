@@ -433,6 +433,7 @@ app.get('/verify', (req, res) => {
 });
 
 app.put('/boodschappenlijstje', (req, res) => {
+
   const params = {
     ingredientAmount: undefined,
     ingredientName: undefined
@@ -463,6 +464,8 @@ app.put('/boodschappenlijstje', (req, res) => {
     ingredientName: undefined,
     ingredientAmount: undefined
   };
+
+  console.log('hoi');
 
   if (params.ingredientAmount === '' || params.ingredientAmount === undefined) {
     params.ingredientAmount = 1;
