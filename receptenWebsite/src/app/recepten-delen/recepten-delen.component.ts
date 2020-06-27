@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {BereidingswijzeComponent} from '../bereidingswijze/bereidingswijze.component';
 import {IngredientenComponent} from '../ingredienten/ingredienten.component';
+import {ConfigService} from '../config.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-recepten-delen',
@@ -16,35 +18,34 @@ export class ReceptenDelenComponent implements OnInit {
   public error: any;
 
 
-  constructor() {
+  constructor(private configService: ConfigService, private router: Router) {
   }
 
   ngOnInit(): void {
   }
 
   submit() {
-    this.error = null; // Clear warning
-
+    this.error = null;
+    // Clear warning
+    let name, bereidingswijze, ingredienten, timers;
     try {
-      // tslint:disable-next-line:prefer-const
-      var bereidingswijze = this.bereidingsWijze.getBereidingswijze(); // Verkrijg textarea data
 
-      // tslint:disable-next-line:prefer-const
-      var ingredienten = this.ingredientenComponent.getIngredienten();
+      name = this.bereidingsWijze.getName();
+      bereidingswijze = this.bereidingsWijze.getBereidingswijze(); // Verkrijg textarea data
 
-      var timers = this.bereidingsWijze.getTimerData(); // Verkrijg timer data: {id: __, minutes: __, seconds: __}
+      ingredienten = this.ingredientenComponent.getIngredienten();
+
+      timers = this.bereidingsWijze.getTimerData();
+
 
     } catch (error) {
       this.showErrorPopup(error);
       return;
     }
+    this.configService.sendNewRecipe(name, bereidingswijze, ingredienten, timers).subscribe(
+      (res) => this.uploadSuccessful(res),
+      error => console.log(error.message));
 
-    console.log(bereidingswijze);
-    console.log(ingredienten);
-    console.log(timers);
-
-
-    // sendDataToDatabase(); TODO
 
   }
 
@@ -53,4 +54,7 @@ export class ReceptenDelenComponent implements OnInit {
   }
 
 
+  private uploadSuccessful(res: any) {
+    this.router.navigate([`recept/${res.id}`]);
+  }
 }

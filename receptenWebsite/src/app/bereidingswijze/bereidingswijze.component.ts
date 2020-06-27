@@ -25,6 +25,8 @@ export class BereidingswijzeComponent implements OnInit {
 
   bereidingswijze = '';
 
+  name = '';
+
   setTimerComponentClass = SetTimerComponent;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {
@@ -48,6 +50,14 @@ export class BereidingswijzeComponent implements OnInit {
     }
   }
 
+
+  getName() {
+    if (this.name.length < 2) {
+      throw new Error('De naam is te kort!');
+    } else {
+      return this.name;
+    }
+  }
 
   private removeComponentById(id: number) {
     this.timerComponents.splice(id, 1);

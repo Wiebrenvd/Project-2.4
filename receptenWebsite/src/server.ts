@@ -105,7 +105,6 @@ left join ingredients as ing on rhi.ingredients_id = ing.id
         }
       });
 
-      console.log(response);
 
       res.send(JSON.stringify(response));
     }
@@ -139,7 +138,7 @@ app.get('/zoek', (req, res) => {
       }
       res.send(JSON.stringify(response));
     } else {
-      res.send(JSON.stringify("empty"));
+      res.send(JSON.stringify('empty'));
     }
   });
 });
@@ -228,6 +227,103 @@ app.post('/login', (req, res) => {
 });
 
 
+app.post('/upload', (req, res) => {
+
+  const updates = {
+    ingredients: undefined,
+    timers: undefined,
+    desc: undefined,
+    name: undefined,
+    id: undefined
+  };
+
+  for (const update of req.body.params.updates) {
+    switch (update.param) {
+      case 'name':
+        updates.name = update.value;
+        break;
+      case 'ingredients':
+        updates.ingredients = update.value;
+        break;
+      case 'desc':
+        updates.desc = update.value;
+        break;
+      case 'timers':
+        updates.timers = update.value;
+        break;
+    }
+  }
+
+  console.log(updates);
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+  const response = {
+    token: undefined,
+    id: undefined
+  };
+  response.token = createJWT(reqToken.sub);
+
+
+  connection.query(`insert into recipes (recipes.name,recipes.desc,recipes.clicks) values ('${updates.name}', '${updates.desc}', 0)`, (err, data) => {
+    if (err) {
+      console.log(err);
+    }
+
+    connection.query(`select last_insert_id() as id from recipes`, (err3, data3) => {
+      if (err) {
+        console.log(err);
+      }
+
+
+      updates.id = data3[0].id;
+      console.log(updates.id);
+      response.id = data3[0].id;
+
+      console.log(data3[0].id);
+
+
+      let valuesArray = [];
+      for (const ingredient of updates.ingredients) {
+        valuesArray.push(`(${updates.id}, ${ingredient.id}, ${ingredient.amount})`);
+      }
+      let queryValues = valuesArray.join(',');
+
+      console.log(queryValues);
+
+      connection.query(`insert into recipes_has_ingredients values ${queryValues}`, (err4, data4) => {
+        if (err) {
+          console.log(err);
+        }
+
+
+      });
+
+
+      valuesArray = [];
+      for (const seconds of updates.timers) {
+        valuesArray.push(`(last_insert_id(), ${seconds})`);
+      }
+      queryValues = valuesArray.join(',');
+
+      connection.query(`insert into timers (recipes_id,seconds) values ${queryValues}`, (err2, data2) => {
+        if (err) {
+          console.log(err);
+        }
+
+        res.send(JSON.stringify(response));
+      });
+    });
+  });
+});
+
+
 app.get('/ingredients', (req, res) => {
 
   let reqToken = '';
@@ -246,7 +342,7 @@ app.get('/ingredients', (req, res) => {
   };
   response.token = createJWT(reqToken.sub);
 
-  connection.query(`select name from ingredients`, (err, data) => {
+  connection.query(`select id, name from ingredients`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
@@ -361,7 +457,7 @@ app.put('/boodschappenlijstje', (req, res) => {
   response.ingredientAmount = params.ingredientAmount;
 
 
-  const query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), ${params.ingredientAmount})`;
+  const query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
 
   connection.query(query, (err, data) => {
     if (err) {
@@ -374,7 +470,6 @@ app.put('/boodschappenlijstje', (req, res) => {
         }
         if (dataId.length > 0) {
           response.ingredientId = dataId[0].id;
-          console.log(dataId[0]);
           res.send(JSON.stringify(response));
         }
       });

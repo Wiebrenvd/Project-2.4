@@ -30,7 +30,6 @@ export class RecipeInterceptor implements HttpInterceptor {
       tap(event => {
         if (event instanceof HttpResponse) {
           if (event.body.token != null) {
-            console.log('nieuwe token:' + event.body.token);
             localStorage.setItem('jwt', event.body.token);
           }
         }

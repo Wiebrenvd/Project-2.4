@@ -5,22 +5,24 @@
   <div class="row">
     <div class="col-md">
       <br>
-
-      <ul>
-        <li *ngFor="let ingredient of ingredients">
-          {{ingredient}}
-          <button value="{{ingredient}}" (click)="removeIngredient($event.target['value'])">X</button>
-        </li>
-        <li>
-          <select (change)="addIngredient($event.target['value'])">
-            <option value="" disabled selected>Voeg nieuw ingredient toe</option>
-            <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
-              {{ingredient}}
-            </option>
-
-          </select>
-        </li>
-      </ul>
+      <div class="row">
+        <ul>
+          <li *ngFor="let ingredient of selectedIngredients">
+            {{ingredient.name + ' - ' + ingredient.amount}}
+            <button value="{{ingredient}}" (click)="removeIngredient(ingredient)">X</button>
+          </li>
+        </ul>
+      </div>
+      <div class="row">
+        <select ngModel name="ingredientObject" #ingredientObject="ngModel">
+          <option value="" disabled selected>Voeg nieuw ingredient toe</option>
+          <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
+            {{ingredient.name}}
+          </option>
+        </select>
+        <input ngModel name="amount" #amount="ngModel" id="amount" type="text">
+      <button (click)="addIngredient(ingredientObject,amount)">+</button>
+      </div>
     </div>
   </div>
 

@@ -1,5 +1,56 @@
 <h2>Boodschappenlijst</h2>
 <div class="container-fluid">
-        <app-boodschappenlijstje></app-boodschappenlijstje>
+  <div>
+    <div class="row">
+      <div class="col-md-6">
+        <b>Artikel</b>
+      </div>
+      <div class="col-md-4">
+        <b>Aantal</b>
+      </div>
+    </div>
+    <div class="row" *ngFor="let ingredient of boodschappenlijst">
+      <div class="col-md-6">
+        {{ ingredient.name }}
+      </div>
+      <div class="col-md-4">
+        {{ingredient.amount}}
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-primary" (click)="verwijderen(ingredient.id)">X
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row-md-4">
+    <div class="col">
+      <form>
+        <div class="form-row">
+          <div class="col">
+            <select style="width:100%" ngModel name="name" #name="ngModel">
+              <option value="" disabled selected>Voeg nieuw ingredient toe</option>
+              <option [ngValue]="ingredient" *ngFor="let ingredient of allIngredients">
+                {{ingredient}}
+              </option>
+
+            </select>
+          </div>
+          <div class="col">
+            <input ngModel name="amount" #amount="ngModel" id="amount" type="text"
+                   placeholder="Aantal">
+          </div>
+
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <button type="submit" class="btn btn-primary" (click)="toevoegen(name, amount)">
+              toevoegen
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
 </div>
