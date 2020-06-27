@@ -14,7 +14,7 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   reactiveForm: FormGroup;
-
+  errorMessage: string;
 
   constructor(private fb: FormBuilder, private configService: ConfigService, private router: Router) {
   }
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.configService.sendLoginData(this.reactiveForm.value.email, sha1(this.reactiveForm.value.password)).subscribe(
         (jwt) => this.loginSuccessful(jwt),
-      error => console.log(error.message));
+      error => this.errorMessage = 'Het email of wachtwoord is onjuist.');
   }
 
   private loginSuccessful(jwt) {

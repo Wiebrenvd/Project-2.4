@@ -36,6 +36,7 @@
 
         <button type="submit" [disabled]="!reactiveForm.valid">Registreren</button>
         <a routerLink="/inloggen" class="btn btn-link">Heb je al een account?</a>
+        <p>{{ errorMessage }}</p>
       </form>
     </div>
   </div>
