@@ -26,14 +26,12 @@
 
       <div class="full-height align-right">
         <nav class="full-height">
-          <button class="full-height btn btn-primary"  routerLink="/home"> home</button>
-          <button class="full-height btn btn-primary" *ngIf="loggedIn" routerLink="/boodschappenlijstje"> boodschappenlijstje</button>
-          <button class="full-height btn btn-primary" routerLink="/recept"> recept</button>
-          <button class="full-height btn btn-primary" routerLink="/receptDelen"> recept delen</button>
-          <button class="full-height btn btn-primary" routerLink="/categorie"> categorie</button>
-          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/registreren"> registreren</button>
-          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/inloggen"> inloggen</button>
-          <button class="full-height btn btn-primary" *ngIf="loggedIn" (click)="this.logout()"> uitloggen</button>
+          <button class="full-height btn btn-primary"  routerLink="/home"> Home </button>
+          <button class="full-height btn btn-primary" *ngIf="loggedIn" routerLink="/boodschappenlijstje"> Boodschappenlijstje</button>
+          <button class="full-height btn btn-primary" routerLink="/receptDelen"> Recept uploaden </button>
+          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/registreren"> Registreren </button>
+          <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/inloggen"> Inloggen </button>
+          <button class="full-height btn btn-primary" *ngIf="loggedIn" (click)="this.logout()"> Uitloggen </button>
         </nav>
       </div>
     </div>

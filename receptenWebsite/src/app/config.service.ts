@@ -65,4 +65,8 @@ export class ConfigService {
     return this.http.get('http://127.0.0.1:3000/verify', {params});
   }
 
+  fetchPopularRecipes() {
+    const params = new HttpParams();
+    return this.http.get('http://127.0.0.1:3000/popular', {params});
+  }
 }

@@ -52,8 +52,8 @@ function createJWT(id) {
 }
 
 
-
 app.get('/recept/:id', (req, res) => {
+
 
   const response = {
     token: undefined,
@@ -76,14 +76,13 @@ app.get('/recept/:id', (req, res) => {
 
   connection.query(`
    SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.id as ingredient_id, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
- inner JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
- inner join ingredients as ing on rhi.ingredients_id = ing.id
+left JOIN recipes_has_ingredients as rhi on rec.id = rhi.recipes_id
+left join ingredients as ing on rhi.ingredients_id = ing.id
  where rec.id = ${parseInt(req.params.id, 10)};`, (err, data) => {
-
     if (err) {
       console.log(err);
     }
-    console.log(data);
+
     if (data.length > 0) {
       const ingredients = [];
       for (const jsonObj of data) {
@@ -98,6 +97,16 @@ app.get('/recept/:id', (req, res) => {
       response.name = data[0].recipe_name;
       response.desc = data[0].recipe_desc;
       response.picture = data[0].recipe_picture;
+
+
+      connection.query(`update recipes set clicks=clicks+1 where id = ${data[0].recipe_id}`, (err2, data2) => {
+        if (err2) {
+          console.log(err2);
+        }
+      });
+
+      console.log(response);
+
       res.send(JSON.stringify(response));
     }
   });
@@ -129,7 +138,7 @@ app.get('/zoek', (req, res) => {
         response.recipes.push(jsonObj);
       }
       res.send(JSON.stringify(response));
-    }else{
+    } else {
       res.send(JSON.stringify("empty"));
     }
   });
@@ -215,7 +224,6 @@ app.post('/login', (req, res) => {
     }
 
 
-
   });
 });
 
@@ -257,6 +265,38 @@ app.get('/ingredients', (req, res) => {
   });
 });
 
+app.get('/popular', (req, res) => {
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+
+
+  const response = {
+    token: undefined,
+    recipes: []
+  };
+  response.token = createJWT(reqToken.sub);
+
+  connection.query(`SELECT id, name, clicks FROM mydb.recipes order by clicks desc limit 5;`, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(400);
+      return;
+    }
+    if (data.length > 0) {
+      for (const jsonObj of data) {
+        response.recipes.push(jsonObj);
+      }
+      res.send(JSON.stringify(response));
+    }
+  });
+});
 
 app.get('/verify', (req, res) => {
 
@@ -275,8 +315,6 @@ app.get('/verify', (req, res) => {
     res.sendStatus(400);
     return;
   }
-
-
 
 
 });
