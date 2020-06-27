@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Ingredient} from '../ingredienten/ingredienten';
 import {Recept} from './recept';
+import {ConfigService} from "../config.service";
 
 @Component({
   selector: 'app-populaire-recepten',
@@ -11,17 +12,25 @@ import {Recept} from './recept';
 export class PopulaireReceptenComponent implements OnInit {
   popularRecipes: Recept[];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private configService: ConfigService) {
+  }
 
   ngOnInit(): void {
     this.popularRecipes = [];
-    this.popularRecipes.push(new Recept(1, 'Rijst'));
-    this.popularRecipes.push(new Recept(2, 'Kip'));
-    this.popularRecipes.push(new Recept(3, 'Spaghetti'));
+    this.configService.fetchPopularRecipes().subscribe(
+      res => this.addRecipes(res),
+      error => console.error(error.message));
   }
 
   submit(recipe: number) {
     this.router.navigate(['recept', recipe]);
   }
 
+  private addRecipes(res: any) {
+    for (const recipe of res.recipes) {
+      const recept = new Recept(recipe.id, recipe.name);
+      recept.setClicks(recipe.clicks);
+      this.popularRecipes.push(recept);
+    }
+  }
 }

@@ -26,6 +26,7 @@ export class ReceptenPaginaComponent implements OnInit {
     this.timers = [];
     this.id = this.route.snapshot.paramMap.get('id');
 
+
     this.configService.sendRecipeFetch(this.id).subscribe(
       res => this.createViews(res),
       error => console.log(error.message));
@@ -33,6 +34,8 @@ export class ReceptenPaginaComponent implements OnInit {
   }
 
   private createViews(recipe: any) {
+
+
     this.name = recipe.name;
     this.description = recipe.desc;
     for (const ingredient of recipe.ingredients) {

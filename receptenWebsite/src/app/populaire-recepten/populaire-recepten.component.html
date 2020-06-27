@@ -4,11 +4,11 @@
   </div>
   <div class="row">
 
-    <ul>
+    <ol>
       <li *ngFor="let recipe of popularRecipes">
-        <a (click)="submit(recipe.id)">{{ recipe.name }}</a>
+        <a (click)="submit(recipe.id)">{{ recipe.name + ' - ' + recipe.clicks }}</a>
       </li>
-    </ul>
+    </ol>
 
   </div>
 </div>
