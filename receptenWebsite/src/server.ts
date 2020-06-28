@@ -54,7 +54,6 @@ function createJWT(id) {
 
 app.get('/recept/:id', (req, res) => {
 
-
   const response = {
     token: undefined,
     ingredients: {},
@@ -126,7 +125,6 @@ app.get('/recept/:id', (req, res) => {
 });
 
 app.get('/zoek', (req, res) => {
-  console.log(req);
   const response = {
     token: undefined,
     recipes: []
@@ -411,6 +409,39 @@ app.get('/popular', (req, res) => {
   }
 
   connection.query(`SELECT id, name, clicks FROM mydb.recipes order by clicks desc limit 5;`, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(400);
+      return;
+    }
+    if (data.length > 0) {
+      for (const jsonObj of data) {
+        response.recipes.push(jsonObj);
+      }
+      res.send(JSON.stringify(response));
+    }
+  });
+});
+
+app.get('/receptofday', (req, res) => {
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+
+
+  const response = {
+    token: undefined,
+    recipes: []
+  };
+  response.token = createJWT(reqToken.sub);
+
+  connection.query(`SELECT id FROM mydb.recipes;`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
