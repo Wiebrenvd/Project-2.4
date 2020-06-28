@@ -206,32 +206,23 @@ app.post('/register', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-
-  const updates = {
+  console.log(req.body);
+  let body = {
     email: undefined,
     password: undefined
   };
+  body = req.body;
 
-  for (const update of req.body.params.updates) {
-    switch (update.param) {
-      case 'email':
-        updates.email = update.value;
-        break;
-      case 'password':
-        updates.password = update.value;
-        break;
-    }
-  }
+  const response = {token: undefined};
 
-
-  connection.query(`select id, username, pass from users where email='${updates.email}'`, (err, data) => {
+  connection.query(`select id, username, pass from users where email='${body.email}'`, (err, data) => {
     if (err) {
       console.log(err);
     }
     if (data.length > 0) {
-      if (updates.password === data[0].pass) {
-
-        res.send(JSON.stringify(createJWT(data[0].id)));
+      if (body.password === data[0].pass) {
+        response.token = createJWT(data[0].id);
+        res.send(JSON.stringify(response));
         return;
       }
     } else {

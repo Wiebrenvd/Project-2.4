@@ -17,8 +17,14 @@ export class ConfigService {
   }
 
   sendLoginData(email: string, password: string) {
-    const params = new HttpParams().set('email', email).set('password', password);
-    return this.http.post('http://127.0.0.1:3000/login', {params});
+    // const params = new HttpParams().set('email', email).set('password', password);
+    const params = {
+      email: undefined,
+      password: undefined
+    };
+    params.email = email;
+    params.password = password;
+    return this.http.post('http://127.0.0.1:3000/login', params);
 
   }
 
@@ -74,6 +80,7 @@ export class ConfigService {
     const params = new HttpParams();
     return this.http.get('http://127.0.0.1:3000/popular', {params});
   }
+
   fetchTotalRecipesIDs() {
     const params = new HttpParams();
     return this.http.get('http://127.0.0.1:3000/receptofday', {params});
