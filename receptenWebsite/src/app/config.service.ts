@@ -48,6 +48,11 @@ export class ConfigService {
     return this.http.put('http://127.0.0.1:3000/boodschappenlijstje', {params});
   }
 
+  sendBoodschappenlijstRecept(receptString: any) {
+    const params = new HttpParams().set('list', receptString);
+    return this.http.put('http://127.0.0.1:3000/boodschappenlijstje', {params});
+  }
+
   fetchIngredients() {
     const params = new HttpParams();
     return this.http.get('http://127.0.0.1:3000/ingredients', {params});

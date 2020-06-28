@@ -13,6 +13,8 @@ export class BoodschappenlijstComponent implements OnInit {
 
   boodschappenlijst: Ingredient[];
 
+  listofRecept: Ingredient[];
+
   allIngredients: Ingredient[];
 
   constructor(private route: ActivatedRoute, private router: Router, private configService: ConfigService) {
@@ -21,15 +23,9 @@ export class BoodschappenlijstComponent implements OnInit {
   ngOnInit(): void {
 
 
+    this.listofRecept = [];
     this.boodschappenlijst = [];
     this.allIngredients = [];
-    this.configService.fetchBoodschappenlijst().subscribe(
-      res => this.createResultViews(res),
-      error => console.log(error.message));
-
-    this.configService.fetchIngredients().subscribe(
-      res => this.addIngredients(res),
-      error => console.log(error.message));
 
     let params = this.route.snapshot.params;
     console.log(params);
@@ -40,27 +36,38 @@ export class BoodschappenlijstComponent implements OnInit {
       params = null;
     }
 
+    this.configService.fetchBoodschappenlijst().subscribe(
+      res => this.createResultViews(res),
+      error => console.log(error.message));
+
+    this.configService.fetchIngredients().subscribe(
+      res => this.addIngredients(res),
+      error => console.log(error.message));
+
+
+
   }
 
   receptToevoegen(ingredientString: string) {
     if (ingredientString === undefined) {
+      // do nothing
     } else {
-
       if (ingredientString.substring(ingredientString.length - 1) === '/') {
         ingredientString = ingredientString.substring(0, ingredientString.length - 1);
       }
-
       const listOfIngredients = ingredientString.split('/');
-      console.log(listOfIngredients);
       for (const ing of listOfIngredients) {
+        // console.log(ing);
         const item = ing.split(':');
-        console.log(item);
-        this.configService.sendBoodschappenlijst(item[0], item[1]).subscribe(
-          res => this.addView(res),
-          error => console.log(error.message));
+        this.listofRecept.push(new Ingredient(0, item[0], item[1]));
       }
+
+      this.configService.sendBoodschappenlijstRecept(this.listofRecept).subscribe(
+        res => null,
+        error => console.log(error.message));
     }
   }
+
 
   verwijderen(id): void {
     this.configService.deleteBoodschappenlijst(id).subscribe(

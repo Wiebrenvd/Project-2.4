@@ -433,11 +433,15 @@ app.get('/verify', (req, res) => {
 });
 
 app.put('/boodschappenlijstje', (req, res) => {
-
   const params = {
     ingredientAmount: undefined,
     ingredientName: undefined
   };
+
+  const update = {
+    listofIngredients: undefined
+  };
+
   for (const updates of req.body.params.updates) {
     switch (updates.param) {
       case 'ingredientName':
@@ -446,8 +450,13 @@ app.put('/boodschappenlijstje', (req, res) => {
       case 'ingredientAmount':
         params.ingredientAmount = updates.value;
         break;
+      default:
+        update.listofIngredients = updates.value;
+        break;
     }
   }
+
+
   let reqToken = '';
   try {
 
@@ -465,8 +474,6 @@ app.put('/boodschappenlijstje', (req, res) => {
     ingredientAmount: undefined
   };
 
-  console.log('hoi');
-
   if (params.ingredientAmount === '' || params.ingredientAmount === undefined) {
     params.ingredientAmount = 1;
   }
@@ -476,10 +483,20 @@ app.put('/boodschappenlijstje', (req, res) => {
   response.ingredientName = params.ingredientName;
   response.ingredientAmount = params.ingredientAmount;
 
-  console.log(params);
-
-  const query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
-
+  const valuesArray = [];
+  let queryValues = '';
+  if (update.listofIngredients !== undefined) {
+    for (const object of update.listofIngredients) {
+      valuesArray.push(`(${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${object.name}'), ${object.amount})`);
+    }
+    queryValues = valuesArray.join(',');
+  }
+  let query = '';
+  if (update.listofIngredients === undefined) {
+     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
+  }else{
+     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
+  }
   connection.query(query, (err, data) => {
     if (err) {
       console.log(err);
