@@ -12,6 +12,9 @@ export class ZoekfunctieComponent implements OnInit {
 
 
   constructor(private configService: ConfigService, private router: Router) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
   }
 
   ngOnInit(): void {

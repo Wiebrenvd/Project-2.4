@@ -7,5 +7,9 @@ export class Ingredient {
   ) {
   }
 
+  setAmount(amount: string) {
+    this.amount = amount;
+  }
+
 
 }

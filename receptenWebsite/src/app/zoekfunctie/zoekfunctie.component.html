@@ -1,4 +1,13 @@
-<div class="container-fluid border">
-  <input (input)="searchString = $event.target.value" type="text" class="w-75"><button (click)="submit()">Zoek</button>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-md-9" style="padding-right:0">
+      <input (input)="searchString = $event.target.value" type="text" style="width:100%">
+    </div>
+    <div class="col-md-3" style="padding-left:0">
+      <button (click)="submit()">Zoek</button>
+    </div>
+
+  </div>
 
 </div>

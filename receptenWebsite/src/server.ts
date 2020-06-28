@@ -64,15 +64,18 @@ app.get('/recept/:id', (req, res) => {
     timers: undefined
   };
 
-  let reqToken = '';
-  try {
-    reqToken = jwt.verify(req.headers.authorization, privateKey);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
-    return;
+  if (req.headers.authorization != null) {
+    let reqToken = '';
+    try {
+      reqToken = jwt.verify(req.headers.authorization, privateKey);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(401);
+      return;
+    }
+
+    response.token = createJWT(reqToken.sub);
   }
-  response.token = createJWT(reqToken.sub);
 
   connection.query(`
    SELECT rec.id as recipe_id,rec.name as recipe_name, rec.picture as recipe_picture, rec.desc as recipe_desc, ing.id as ingredient_id, ing.name as ingredient_name, rhi.amount as amount FROM recipes as rec
@@ -123,20 +126,24 @@ app.get('/recept/:id', (req, res) => {
 });
 
 app.get('/zoek', (req, res) => {
+  console.log(req);
   const response = {
     token: undefined,
     recipes: []
   };
 
-  let reqToken = '';
-  try {
-    reqToken = jwt.verify(req.headers.authorization, privateKey);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
-    return;
+  if (req.headers.authorization != null) {
+
+    let reqToken = '';
+    try {
+      reqToken = jwt.verify(req.headers.authorization, privateKey);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(401);
+      return;
+    }
+    response.token = createJWT(reqToken.sub);
   }
-  response.token = createJWT(reqToken.sub);
 
   connection.query(`SELECT * from recipes where name LIKE '%${req.query.searchString}%'`, (err, data) => {
     if (err) {
@@ -343,21 +350,24 @@ app.post('/upload', (req, res) => {
 
 app.get('/ingredients', (req, res) => {
 
-  let reqToken = '';
-  try {
-    reqToken = jwt.verify(req.headers.authorization, privateKey);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
-    return;
-  }
-
 
   const response = {
     token: undefined,
     ingredients: []
   };
-  response.token = createJWT(reqToken.sub);
+
+  if (req.headers.authorization != null) {
+
+    let reqToken = '';
+    try {
+      reqToken = jwt.verify(req.headers.authorization, privateKey);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(401);
+      return;
+    }
+    response.token = createJWT(reqToken.sub);
+  }
 
   connection.query(`select id, name from ingredients`, (err, data) => {
     if (err) {
@@ -380,21 +390,25 @@ app.get('/ingredients', (req, res) => {
 
 app.get('/popular', (req, res) => {
 
-  let reqToken = '';
-  try {
-    reqToken = jwt.verify(req.headers.authorization, privateKey);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(401);
-    return;
-  }
-
 
   const response = {
     token: undefined,
     recipes: []
   };
-  response.token = createJWT(reqToken.sub);
+
+
+  if (req.headers.authorization != null) {
+
+    let reqToken = '';
+    try {
+      reqToken = jwt.verify(req.headers.authorization, privateKey);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(401);
+      return;
+    }
+    response.token = createJWT(reqToken.sub);
+  }
 
   connection.query(`SELECT id, name, clicks FROM mydb.recipes order by clicks desc limit 5;`, (err, data) => {
     if (err) {
@@ -493,9 +507,9 @@ app.put('/boodschappenlijstje', (req, res) => {
   }
   let query = '';
   if (update.listofIngredients === undefined) {
-     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
-  }else{
-     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
+    query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
+  } else {
+    query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
   }
   connection.query(query, (err, data) => {
     if (err) {
