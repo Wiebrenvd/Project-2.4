@@ -268,7 +268,7 @@ app.post('/upload', (req, res) => {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);
-    res.sendStatus(400);
+    res.sendStatus(401);
     return;
   }
   const response = {
@@ -403,21 +403,27 @@ app.get('/popular', (req, res) => {
 
 app.get('/receptofday', (req, res) => {
 
-  let reqToken = '';
-  try {
-    reqToken = jwt.verify(req.headers.authorization, privateKey);
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(400);
-    return;
-  }
+
+
 
 
   const response = {
     token: undefined,
     recipes: []
   };
-  response.token = createJWT(reqToken.sub);
+
+  if (req.headers.authorization != null) {
+
+    let reqToken = '';
+    try {
+      reqToken = jwt.verify(req.headers.authorization, privateKey);
+    } catch (err) {
+      console.error(err);
+      res.sendStatus(400);
+      return;
+    }
+    response.token = createJWT(reqToken.sub);
+  }
 
   connection.query(`SELECT id FROM mydb.recipes;`, (err, data) => {
     if (err) {
@@ -435,7 +441,6 @@ app.get('/receptofday', (req, res) => {
 });
 
 app.get('/verify', (req, res) => {
-  console.log(req.headers);
   const response = {
     token: undefined
   };
@@ -447,7 +452,6 @@ app.get('/verify', (req, res) => {
     res.send(JSON.stringify(response));
     return;
   } catch (err) {
-    // console.error(err);
     console.log('JWT Error');
     res.sendStatus(400);
     return;

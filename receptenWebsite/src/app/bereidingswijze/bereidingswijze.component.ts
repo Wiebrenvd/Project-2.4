@@ -76,13 +76,17 @@ export class BereidingswijzeComponent implements OnInit {
   }
 
   getImage() {
-    if (this.bereidingswijze.length <= 0 ) {
-      return null;
-    } else if (!this.image.match(/\.(jpeg|jpg|png)$/)) {
-      throw new Error('Geen geldige afbeelding!');
-    }
+    if (this.image != null) {
+      if (this.image.length <= 0) {
+        return null;
+      } else if (!this.image.match(/\.(jpeg|jpg|png)$/)) {
+        throw new Error('Geen geldige afbeelding!');
+      }
 
-    return this.image;
+      return this.image;
+    } else {
+      return null;
+    }
   }
 
 
