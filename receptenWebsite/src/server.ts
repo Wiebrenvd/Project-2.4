@@ -162,38 +162,29 @@ app.get('/zoek', (req, res) => {
 
 app.post('/register', (req, res) => {
 
-  const requestParams = {
+  let body = {
     username: undefined,
     email: undefined,
     password: undefined
   };
-  for (const httpMap of req.body.params.updates) {
-    switch (httpMap.param) {
-      case 'username':
-        requestParams.username = httpMap.value;
-        break;
-      case 'email':
-        requestParams.email = httpMap.value;
-        break;
-      case 'password':
-        requestParams.password = httpMap.value;
-        break;
-    }
-  }
+  body = req.body;
+  console.log(body);
+  console.log('Body' + body.username);
 
+  const response = {token: undefined};
 
-  connection.query(`INSERT INTO users (username, email, pass) VALUES ('${requestParams.username}' ,'${requestParams.email}', '${requestParams.password}')`, (err, data) => {
+  connection.query(`INSERT INTO users (username, email, pass) VALUES ('${body.username}' ,'${body.email}', '${body.password}')`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
     } else {
-      connection.query(`select id from users where users.username like '${requestParams.username}'`, (error, dataId) => {
+      connection.query(`select id from users where users.username like '${body.username}'`, (error, dataId) => {
         if (error) {
           console.log(error);
         }
         if (dataId.length > 0) {
-          const id = dataId[0].id;
-          const response = createJWT(id);
+          console.log(dataId);
+          response.token = createJWT(dataId[0].id);
           res.send(JSON.stringify(response));
         }
       });
@@ -277,7 +268,7 @@ app.post('/upload', (req, res) => {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);
-    res.sendStatus(401);
+    res.sendStatus(400);
     return;
   }
   const response = {
@@ -448,7 +439,7 @@ app.get('/receptofday', (req, res) => {
 });
 
 app.get('/verify', (req, res) => {
-
+  console.log(req.headers);
   const response = {
     token: undefined
   };

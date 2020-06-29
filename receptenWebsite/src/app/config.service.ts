@@ -66,8 +66,16 @@ export class ConfigService {
 
 
   register(username: string, email: string, password: string) {
-    const params = new HttpParams().set('username', username).set('email', email).set('password', password);
-    return this.http.post('http://127.0.0.1:3000/register', {params});
+    //const params = new HttpParams().set('username', username).set('email', email).set('password', password);
+    const params = {
+      username: undefined,
+      email: undefined,
+      password: undefined
+    };
+    params.username = username;
+    params.email = email;
+    params.password = password;
+    return this.http.post('http://127.0.0.1:3000/register', params);
   }
 
 
