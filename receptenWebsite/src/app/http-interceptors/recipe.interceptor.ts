@@ -19,6 +19,7 @@ export class RecipeInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const token = localStorage.getItem('jwt');
+    console.log('token is ' + token);
     if (token) {
       request = request.clone({
         headers: request.headers.set('Authorization', token)
