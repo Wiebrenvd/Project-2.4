@@ -342,7 +342,7 @@ app.get('/ingredients', (req, res) => {
     response.token = createJWT(reqToken.sub);
   }
 
-  connection.query(`select id, name from ingredients`, (err, data) => {
+  connection.query(`select id, name from ingredients order by name ASC`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
