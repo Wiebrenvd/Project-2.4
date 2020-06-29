@@ -59,12 +59,15 @@ export class ResultComponent implements OnInit {
   }
 
   private createResultViews(response: any) {
-    if (response === 'empty') {
-      this.noRecipeFound(this.recipeResultComponentClass);
-    }
-    const recipes = response.recipes;
-    for (const recipe of recipes) {
-      this.addRecipe(this.recipeResultComponentClass, recipe);
+    if (response.recipes) {
+
+      if (response === 'empty') {
+        this.noRecipeFound(this.recipeResultComponentClass);
+      }
+      const recipes = response.recipes;
+      for (const recipe of recipes) {
+        this.addRecipe(this.recipeResultComponentClass, recipe);
+      }
     }
   }
 }
