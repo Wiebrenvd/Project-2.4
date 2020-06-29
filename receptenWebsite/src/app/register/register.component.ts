@@ -50,8 +50,6 @@ export class RegisterComponent implements OnInit {
   }
 
   private registerSuccessful(res: any) {
-    localStorage.setItem('jwt', res);
-    console.log(localStorage.getItem('jwt'));
     this.router.navigate(['home']);
 
   }

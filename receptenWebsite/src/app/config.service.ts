@@ -74,6 +74,7 @@ export class ConfigService {
     const params = new HttpParams();
     return this.http.get('http://127.0.0.1:3000/popular', {params});
   }
+
   fetchTotalRecipesIDs() {
     const params = new HttpParams();
     return this.http.get('http://127.0.0.1:3000/receptofday', {params});

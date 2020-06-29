@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
 connection.connect(err => {
   if (err) {
     console.error('Start de database aub');
-    throw err;
+    // throw err;
   }
   console.log('Verbonden met database');
 });
@@ -69,7 +69,7 @@ app.get('/recept/:id', (req, res) => {
       reqToken = jwt.verify(req.headers.authorization, privateKey);
     } catch (err) {
       console.error(err);
-      res.sendStatus(401);
+      res.sendStatus(400);
       return;
     }
 
@@ -137,7 +137,7 @@ app.get('/zoek', (req, res) => {
       reqToken = jwt.verify(req.headers.authorization, privateKey);
     } catch (err) {
       console.error(err);
-      res.sendStatus(401);
+      res.sendStatus(400);
       return;
     }
     response.token = createJWT(reqToken.sub);
@@ -235,7 +235,7 @@ app.post('/login', (req, res) => {
         return;
       }
     } else {
-      res.sendStatus(401);
+      res.sendStatus(400);
     }
 
 
@@ -279,14 +279,13 @@ app.post('/upload', (req, res) => {
     }
   }
 
-  console.log(updates);
 
   let reqToken = '';
   try {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);
-    res.sendStatus(401);
+    res.sendStatus(400);
     return;
   }
   const response = {
@@ -308,7 +307,6 @@ app.post('/upload', (req, res) => {
 
       response.id = data3[0].id;
 
-      console.log(data3[0].id);
 
 
       let valuesArray = [];
@@ -317,7 +315,6 @@ app.post('/upload', (req, res) => {
       }
       let queryValues = valuesArray.join(',');
 
-      console.log(queryValues);
 
       connection.query(`insert into recipes_has_ingredients values ${queryValues}`, (err4, data4) => {
         if (err) {
@@ -361,7 +358,7 @@ app.get('/ingredients', (req, res) => {
       reqToken = jwt.verify(req.headers.authorization, privateKey);
     } catch (err) {
       console.error(err);
-      res.sendStatus(401);
+      res.sendStatus(400);
       return;
     }
     response.token = createJWT(reqToken.sub);
@@ -402,7 +399,7 @@ app.get('/popular', (req, res) => {
       reqToken = jwt.verify(req.headers.authorization, privateKey);
     } catch (err) {
       console.error(err);
-      res.sendStatus(401);
+      res.sendStatus(400);
       return;
     }
     response.token = createJWT(reqToken.sub);
@@ -430,7 +427,7 @@ app.get('/receptofday', (req, res) => {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);
-    res.sendStatus(401);
+    res.sendStatus(400);
     return;
   }
 
@@ -469,7 +466,8 @@ app.get('/verify', (req, res) => {
     res.send(JSON.stringify(response));
     return;
   } catch (err) {
-    console.error(err);
+    // console.error(err);
+    console.log('JWT Error');
     res.sendStatus(400);
     return;
   }
@@ -504,7 +502,6 @@ app.put('/boodschappenlijstje', (req, res) => {
 
   let reqToken = '';
   try {
-
     reqToken = jwt.verify(req.headers.authorization, privateKey);
   } catch (err) {
     console.error(err);

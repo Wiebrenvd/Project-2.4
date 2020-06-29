@@ -36,7 +36,7 @@ export class RecipeInterceptor implements HttpInterceptor {
       }, error => {
         console.error(error);
         if (error.status === 401) {
-          this.router.navigate(['inloggen']);
+          // this.router.navigate(['inloggen']);
         }
 
 
