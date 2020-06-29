@@ -382,13 +382,11 @@ app.get('/popular', (req, res) => {
       reqToken = jwt.verify(req.headers.authorization, privateKey);
     } catch (err) {
       console.error(err);
-      res.sendStatus(400);
-      return;
     }
     response.token = createJWT(reqToken.sub);
   }
 
-  connection.query(`SELECT id, name, clicks FROM mydb.recipes order by clicks desc limit 5;`, (err, data) => {
+  connection.query(`SELECT id, name, clicks, picture FROM mydb.recipes order by clicks desc limit 5;`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
