@@ -44,8 +44,12 @@ export class ConfigService {
     return this.http.get(`http://127.0.0.1:3000/boodschappenlijstje`, {params});
   }
 
-  deleteBoodschappenlijst(id: string) {
-    const params = new HttpParams();
+  deleteBoodschappenlijst(id: any) {
+    //const params = new HttpParams();
+    const params = {
+      listofIngredients: undefined
+    };
+    params.listofIngredients = id;
     return this.http.delete(`http://127.0.0.1:3000/boodschappenlijstje/${id}`, {params});
   }
 
@@ -77,7 +81,6 @@ export class ConfigService {
     params.password = password;
     return this.http.post('http://127.0.0.1:3000/register', params);
   }
-
 
   verifyJWT() {
     const params = new HttpParams();

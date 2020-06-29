@@ -461,6 +461,7 @@ app.get('/verify', (req, res) => {
 });
 
 app.put('/boodschappenlijstje', (req, res) => {
+  console.log(req);
   const params = {
     ingredientAmount: undefined,
     ingredientName: undefined
@@ -480,6 +481,7 @@ app.put('/boodschappenlijstje', (req, res) => {
         break;
       default:
         update.listofIngredients = updates.value;
+        console.log(update.listofIngredients);
         break;
     }
   }
@@ -585,8 +587,6 @@ where users.id = ${reqToken.sub}`, (err, data) => {
 });
 
 app.delete('/boodschappenlijstje/:id', (req, res) => {
-
-
   let reqToken = '';
   try {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
@@ -615,6 +615,36 @@ app.delete('/boodschappenlijstje/:id', (req, res) => {
 
   });
 });
+
+app.delete('/deleteboodschappenlijstje', (req, res) => {
+
+  let reqToken = '';
+  try {
+    reqToken = jwt.verify(req.headers.authorization, privateKey);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(401);
+    return;
+  }
+
+  const userID = reqToken.sub;
+
+  const response = {
+    token: undefined,
+    id: undefined
+  };
+  response.token = createJWT(reqToken.sub);
+
+  connection.query(`DELETE from shoppinglist where users_id = ${userID};`, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(400);
+      return;
+    }
+    res.send(JSON.stringify(response));
+  });
+});
+
 
 let server = app.listen(PORT, '127.0.0.1', () => {
   const host = server.address().address;
