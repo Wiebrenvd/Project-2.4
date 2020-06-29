@@ -53,9 +53,9 @@ export class ConfigService {
     return this.http.delete(`http://127.0.0.1:3000/boodschappenlijstje/${id}`, {params});
   }
 
-  sendBoodschappenlijst(ingredientName: string, amount: string) {
-    const params = new HttpParams().set('ingredientName', ingredientName).set('ingredientAmount', amount);
-    return this.http.put('http://127.0.0.1:3000/boodschappenlijstje', {params});
+  sendBoodschappenlijst(params: any[]) {
+
+    return this.http.put('http://127.0.0.1:3000/boodschappenlijstje', params);
   }
 
   sendBoodschappenlijstRecept(receptString: any) {
@@ -70,7 +70,6 @@ export class ConfigService {
 
 
   register(username: string, email: string, password: string) {
-    //const params = new HttpParams().set('username', username).set('email', email).set('password', password);
     const params = {
       username: undefined,
       email: undefined,
@@ -97,8 +96,7 @@ export class ConfigService {
     return this.http.get('http://127.0.0.1:3000/receptofday', {params});
   }
 
-  sendNewRecipe(name: any, bereidingswijze: any, ingredienten: any, timers: any, image: any) {
-    const params = new HttpParams().set('name', name).set('desc', bereidingswijze).set('ingredients', ingredienten).set('timers', timers).set('image', image);
-    return this.http.post('http://127.0.0.1:3000/upload', {params});
+  sendNewRecipe(params: { image: undefined; timers: undefined; ingredients: undefined; name: undefined; desc: undefined }) {
+    return this.http.post('http://127.0.0.1:3000/upload', params);
   }
 }

@@ -13,7 +13,7 @@ export class BoodschappenlijstComponent implements OnInit {
 
   boodschappenlijst: Ingredient[];
 
-  listofRecept: Ingredient[];
+  listofRecept: any[];
 
   allIngredients: Ingredient[];
 
@@ -28,10 +28,8 @@ export class BoodschappenlijstComponent implements OnInit {
     this.allIngredients = [];
 
     let params = this.route.snapshot.params;
-    console.log(params);
     if (params === undefined) {
     } else {
-      console.log('excuted');
       this.receptToevoegen(params.ing);
       params = null;
     }
@@ -45,7 +43,6 @@ export class BoodschappenlijstComponent implements OnInit {
       error => console.log(error.message));
 
 
-
   }
 
   receptToevoegen(ingredientString: string) {
@@ -57,13 +54,21 @@ export class BoodschappenlijstComponent implements OnInit {
       }
       const listOfIngredients = ingredientString.split('/');
       for (const ing of listOfIngredients) {
-        // console.log(ing);
         const item = ing.split(':');
-        this.listofRecept.push(new Ingredient(0, item[0], item[1]));
+
+        const ingredient = {
+          name: undefined,
+          amount: undefined
+        };
+
+        ingredient.name = item[0];
+        ingredient.amount = item[1];
+        this.listofRecept.push(ingredient);
       }
 
-      this.configService.sendBoodschappenlijstRecept(this.listofRecept).subscribe(
-        res => null,
+
+      this.configService.sendBoodschappenlijst(this.listofRecept).subscribe(
+        res => this.fetchBoodschappenlijst(),
         error => console.log(error.message));
     }
   }
@@ -77,12 +82,23 @@ export class BoodschappenlijstComponent implements OnInit {
   }
 
   toevoegen(name: NgModel, amount: NgModel): void {
-    this.configService.sendBoodschappenlijst(name.value, amount.value).subscribe(
-      res => this.addView(res),
+
+    const params = [];
+    const ingredients = {
+      name: undefined,
+      amount: undefined
+    };
+    ingredients.name = name.value;
+    ingredients.amount = amount.value;
+    params.push(ingredients);
+
+    this.configService.sendBoodschappenlijst(params).subscribe(
+      res => this.fetchBoodschappenlijst(),
       error => console.log(error.message));
   }
 
   private createResultViews(response: any) {
+    this.boodschappenlijst = [];
     for (const responseIngredient of response.ingredients) {
       const ingredient = new Ingredient(responseIngredient.id, responseIngredient.name, responseIngredient.amount);
       this.boodschappenlijst.push(ingredient);
@@ -118,4 +134,13 @@ export class BoodschappenlijstComponent implements OnInit {
     }
 
   }
+
+  private fetchBoodschappenlijst() {
+    this.configService.fetchBoodschappenlijst().subscribe(
+      res => this.createResultViews(res),
+      error => console.log(error.message));
+    this.router.navigate(['boodschappenlijstje']);
+  }
+
+
 }

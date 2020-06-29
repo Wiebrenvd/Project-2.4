@@ -223,40 +223,6 @@ app.post('/login', (req, res) => {
 
 app.post('/upload', (req, res) => {
 
-  const updates = {
-    ingredients: undefined,
-    timers: undefined,
-    desc: undefined,
-    name: undefined,
-    id: undefined,
-    image: undefined
-  };
-
-  for (const update of req.body.params.updates) {
-    switch (update.param) {
-      case 'name':
-        updates.name = update.value;
-        break;
-      case 'ingredients':
-        updates.ingredients = update.value;
-        break;
-      case 'desc':
-        updates.desc = update.value;
-        break;
-      case 'timers':
-        updates.timers = update.value;
-        break;
-      case 'image':
-        if (!update.value) {
-          updates.image = null;
-        } else {
-          updates.image = update.value;
-        }
-
-        break;
-    }
-  }
-
 
   let reqToken = '';
   try {
@@ -266,13 +232,14 @@ app.post('/upload', (req, res) => {
     res.sendStatus(401);
     return;
   }
+
   const response = {
     token: undefined,
     id: undefined
   };
   response.token = createJWT(reqToken.sub);
 
-  connection.query(`insert into recipes (recipes.name,recipes.desc,recipes.clicks, recipes.picture) values ('${updates.name}', '${updates.desc}', 0, '${updates.image}')`, (err, data) => {
+  connection.query(`insert into recipes (recipes.name,recipes.desc,recipes.clicks, recipes.picture) values ('${req.body.name}', '${req.body.desc}', 0, '${req.body.image}')`, (err, data) => {
     if (err) {
       console.log(err);
     }
@@ -287,7 +254,7 @@ app.post('/upload', (req, res) => {
 
 
       let valuesArray = [];
-      for (const ingredient of updates.ingredients) {
+      for (const ingredient of req.body.ingredients) {
         valuesArray.push(`(${response.id}, ${ingredient.id}, ${ingredient.amount})`);
       }
       let queryValues = valuesArray.join(',');
@@ -303,7 +270,7 @@ app.post('/upload', (req, res) => {
 
 
       valuesArray = [];
-      for (const seconds of updates.timers) {
+      for (const seconds of req.body.timers) {
         valuesArray.push(`(last_insert_id(), ${seconds})`);
       }
       queryValues = valuesArray.join(',');
@@ -452,37 +419,12 @@ app.get('/verify', (req, res) => {
 });
 
 app.put('/boodschappenlijstje', (req, res) => {
-  console.log(req);
-  const params = {
-    ingredientAmount: undefined,
-    ingredientName: undefined
+
+  const response = {
+    token: undefined
   };
 
-  const update = {
-    listofIngredients: undefined
-  };
-  if (req.body.params.updates !== undefined) {
-    for (const updates of req.body.params.updates) {
-      switch (updates.param) {
-        case 'ingredientName':
-          params.ingredientName = updates.value;
-          break;
-        case 'ingredientAmount':
-          params.ingredientAmount = updates.value;
-          break;
-        default:
-          update.listofIngredients = updates.value;
-          console.log(update.listofIngredients);
-          break;
-      }
-    }
-  }else{
-    for (const updates of req.body) {
-      update.listofIngredients = updates.value;
-    }
-  }
-  console.log(update.listofIngredients);
-
+  // CHECK FOR JWT
   let reqToken = '';
   try {
     reqToken = jwt.verify(req.headers.authorization, privateKey);
@@ -492,57 +434,40 @@ app.put('/boodschappenlijstje', (req, res) => {
     return;
   }
 
-  const response = {
-    token: undefined,
-    ingredientId: undefined,
-    ingredientName: undefined,
-    ingredientAmount: undefined
-  };
 
-  if (params.ingredientAmount === '' || params.ingredientAmount === undefined) {
-    params.ingredientAmount = 1;
-  }
-
+  const ingredientList = req.body;
   response.token = createJWT(reqToken.sub);
 
-  response.ingredientName = params.ingredientName;
-  response.ingredientAmount = params.ingredientAmount;
 
+// Voeg alles toe aan query string
   const valuesArray = [];
   let queryValues = '';
-  if (update.listofIngredients !== undefined) {
-    for (const object of update.listofIngredients) {
-      valuesArray.push(`(${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${object.name}'), ${object.amount})`);
-    }
-    queryValues = valuesArray.join(',');
+
+  for (const ingredient of ingredientList) {
+    valuesArray.push(`(${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${ingredient.name}'), ${ingredient.amount})`);
   }
-  let query = '';
-  if (update.listofIngredients === undefined) {
-    query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
-  } else {
-    query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
-  }
+  queryValues = valuesArray.join(',');
+
+  const query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
+
   connection.query(query, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
     } else {
-      connection.query(`select last_insert_id() as id from shoppinglist`, (error, dataId) => {
-        if (error) {
-          console.log(error);
-        }
-        if (dataId.length > 0) {
-          response.ingredientId = dataId[0].id;
-          res.send(JSON.stringify(response));
-        }
-      });
+      res.send(JSON.stringify(response));
     }
 
+
+
+
   });
-});
+
+
+})
+;
 
 app.get('/boodschappenlijstje', (req, res) => {
-  console.log(req);
   let reqToken = '';
   try {
 
@@ -570,7 +495,6 @@ where users.id = ${reqToken.sub}`, (err, data) => {
       return;
     }
     if (data.length > 0) {
-      console.log(data);
       for (const jsonObj of data) {
         response.ingredients.push(jsonObj);
       }

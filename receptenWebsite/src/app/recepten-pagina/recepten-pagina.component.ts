@@ -35,7 +35,7 @@ export class ReceptenPaginaComponent implements OnInit {
 
   private createViews(recipe: any) {
 
-
+    console.log(recipe);
     this.name = recipe.name;
     this.description = recipe.desc;
     if (recipe.image === null) {

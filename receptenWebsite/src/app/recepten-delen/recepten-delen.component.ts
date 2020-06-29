@@ -47,7 +47,23 @@ export class ReceptenDelenComponent implements OnInit {
       this.showErrorPopup(error);
       return;
     }
-    this.configService.sendNewRecipe(name, bereidingswijze, ingredienten, timers, image).subscribe(
+
+    const params = {
+      name: undefined,
+      desc: undefined,
+      ingredients: undefined,
+      timers: undefined,
+      image: undefined
+    };
+    // name, bereidingswijze, ingredienten, timers, image
+    params.name = name;
+    params.desc = bereidingswijze;
+    params.ingredients = ingredienten;
+    params.timers = timers;
+    params.image = image;
+
+
+    this.configService.sendNewRecipe(params).subscribe(
       (res) => this.uploadSuccessful(res),
       error => console.log(error.message));
 
