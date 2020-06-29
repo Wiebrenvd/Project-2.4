@@ -286,7 +286,6 @@ app.post('/upload', (req, res) => {
       response.id = data3[0].id;
 
 
-
       let valuesArray = [];
       for (const ingredient of updates.ingredients) {
         valuesArray.push(`(${response.id}, ${ingredient.id}, ${ingredient.amount})`);
@@ -399,9 +398,6 @@ app.get('/popular', (req, res) => {
 app.get('/receptofday', (req, res) => {
 
 
-
-
-
   const response = {
     token: undefined,
     recipes: []
@@ -465,22 +461,27 @@ app.put('/boodschappenlijstje', (req, res) => {
   const update = {
     listofIngredients: undefined
   };
-
-  for (const updates of req.body.params.updates) {
-    switch (updates.param) {
-      case 'ingredientName':
-        params.ingredientName = updates.value;
-        break;
-      case 'ingredientAmount':
-        params.ingredientAmount = updates.value;
-        break;
-      default:
-        update.listofIngredients = updates.value;
-        console.log(update.listofIngredients);
-        break;
+  if (req.body.params.updates !== undefined) {
+    for (const updates of req.body.params.updates) {
+      switch (updates.param) {
+        case 'ingredientName':
+          params.ingredientName = updates.value;
+          break;
+        case 'ingredientAmount':
+          params.ingredientAmount = updates.value;
+          break;
+        default:
+          update.listofIngredients = updates.value;
+          console.log(update.listofIngredients);
+          break;
+      }
+    }
+  }else{
+    for (const updates of req.body) {
+      update.listofIngredients = updates.value;
     }
   }
-
+  console.log(update.listofIngredients);
 
   let reqToken = '';
   try {
