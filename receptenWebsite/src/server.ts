@@ -168,8 +168,6 @@ app.post('/register', (req, res) => {
     password: undefined
   };
   body = req.body;
-  console.log(body);
-  console.log('Body' + body.username);
 
   const response = {token: undefined};
 
@@ -183,7 +181,6 @@ app.post('/register', (req, res) => {
           console.log(error);
         }
         if (dataId.length > 0) {
-          console.log(dataId);
           response.token = createJWT(dataId[0].id);
           res.send(JSON.stringify(response));
         }
@@ -197,13 +194,11 @@ app.post('/register', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  console.log(req.body);
   let body = {
     email: undefined,
     password: undefined
   };
   body = req.body;
-  console.log(req.body);
 
   const response = {token: undefined};
 
@@ -347,7 +342,7 @@ app.get('/ingredients', (req, res) => {
     response.token = createJWT(reqToken.sub);
   }
 
-  connection.query(`select id, name from ingredients`, (err, data) => {
+  connection.query(`select id, name from ingredients order by name ASC`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
@@ -546,7 +541,7 @@ app.put('/boodschappenlijstje', (req, res) => {
 });
 
 app.get('/boodschappenlijstje', (req, res) => {
-
+  console.log(req);
   let reqToken = '';
   try {
 
@@ -574,6 +569,7 @@ where users.id = ${reqToken.sub}`, (err, data) => {
       return;
     }
     if (data.length > 0) {
+      console.log(data);
       for (const jsonObj of data) {
         response.ingredients.push(jsonObj);
       }
