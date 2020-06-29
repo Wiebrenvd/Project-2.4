@@ -162,29 +162,38 @@ app.get('/zoek', (req, res) => {
 
 app.post('/register', (req, res) => {
 
-  let body = {
+  const requestParams = {
     username: undefined,
     email: undefined,
     password: undefined
   };
-  body = req.body;
-  console.log(body);
-  console.log('Body' + body.username);
+  for (const httpMap of req.body.params.updates) {
+    switch (httpMap.param) {
+      case 'username':
+        requestParams.username = httpMap.value;
+        break;
+      case 'email':
+        requestParams.email = httpMap.value;
+        break;
+      case 'password':
+        requestParams.password = httpMap.value;
+        break;
+    }
+  }
 
-  const response = {token: undefined};
 
-  connection.query(`INSERT INTO users (username, email, pass) VALUES ('${body.username}' ,'${body.email}', '${body.password}')`, (err, data) => {
+  connection.query(`INSERT INTO users (username, email, pass) VALUES ('${requestParams.username}' ,'${requestParams.email}', '${requestParams.password}')`, (err, data) => {
     if (err) {
       console.log(err);
       res.sendStatus(400);
     } else {
-      connection.query(`select id from users where users.username like '${body.username}'`, (error, dataId) => {
+      connection.query(`select id from users where users.username like '${requestParams.username}'`, (error, dataId) => {
         if (error) {
           console.log(error);
         }
         if (dataId.length > 0) {
-          console.log(dataId);
-          response.token = createJWT(dataId[0].id);
+          const id = dataId[0].id;
+          const response = createJWT(id);
           res.send(JSON.stringify(response));
         }
       });
@@ -197,23 +206,32 @@ app.post('/register', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  console.log(req.body);
-  let body = {
+
+  const updates = {
     email: undefined,
     password: undefined
   };
-  body = req.body;
 
-  const response = {token: undefined};
+  for (const update of req.body.params.updates) {
+    switch (update.param) {
+      case 'email':
+        updates.email = update.value;
+        break;
+      case 'password':
+        updates.password = update.value;
+        break;
+    }
+  }
 
-  connection.query(`select id, username, pass from users where email='${body.email}'`, (err, data) => {
+
+  connection.query(`select id, username, pass from users where email='${updates.email}'`, (err, data) => {
     if (err) {
       console.log(err);
     }
     if (data.length > 0) {
-      if (body.password === data[0].pass) {
-        response.token = createJWT(data[0].id);
-        res.send(JSON.stringify(response));
+      if (updates.password === data[0].pass) {
+
+        res.send(JSON.stringify(createJWT(data[0].id)));
         return;
       }
     } else {
@@ -288,7 +306,6 @@ app.post('/upload', (req, res) => {
 
 
       response.id = data3[0].id;
-
 
 
       let valuesArray = [];
@@ -436,7 +453,7 @@ app.get('/receptofday', (req, res) => {
 });
 
 app.get('/verify', (req, res) => {
-  console.log(req.headers);
+
   const response = {
     token: undefined
   };
@@ -448,7 +465,6 @@ app.get('/verify', (req, res) => {
     res.send(JSON.stringify(response));
     return;
   } catch (err) {
-    // console.error(err);
     console.log('JWT Error');
     res.sendStatus(400);
     return;
@@ -515,12 +531,16 @@ app.put('/boodschappenlijstje', (req, res) => {
     }
     queryValues = valuesArray.join(',');
   }
+
+
   let query = '';
   if (update.listofIngredients === undefined) {
     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES (${reqToken.sub}, (select ing.id from ingredients as ing where ing.name = '${params.ingredientName}'), '${params.ingredientAmount}')`;
   } else {
     query = `insert into shoppinglist (users_id, ingredients_id, amount) VALUES` + queryValues;
   }
+
+
   connection.query(query, (err, data) => {
     if (err) {
       console.log(err);

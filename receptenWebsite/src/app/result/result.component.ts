@@ -24,7 +24,8 @@ export class ResultComponent implements OnInit {
   private components = [];
   private recipeResultComponentClass = RecipeResultComponent;
 
-  constructor(private configService: ConfigService, private route: ActivatedRoute, private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private configService: ConfigService, private route: ActivatedRoute, private componentFactoryResolver: ComponentFactoryResolver) {
+  }
 
   ngOnInit(): void {
     this.searchString = this.route.snapshot.paramMap.get('searchString');
@@ -46,15 +47,19 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  noRecipeFound(componentClass: Type<any>){
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentClass);
-    const component = this.container.createComponent(componentFactory);
-    this.components.push(component);
-    component.instance.desc = 'Geen resultaat gevonden, probeer iets anders';
+  noRecipeFound(componentClass: Type<any>) {
+    if (this.searchString) {
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentClass);
+      const component = this.container.createComponent(componentFactory);
+      this.components.push(component);
+
+      component.instance.desc = 'Geen resultaat gevonden, probeer iets anders';
+    }
+
   }
 
   private createResultViews(response: any) {
-    if (response === 'empty'){
+    if (response === 'empty') {
       this.noRecipeFound(this.recipeResultComponentClass);
     }
     const recipes = response.recipes;

@@ -12,6 +12,7 @@ export class ReceptVanDeDagComponent implements OnInit {
   recipeDesc: string;
   recipeImg: string;
   seed: number;
+  recipeId: any;
 
   constructor(private configService: ConfigService) {
   }
@@ -20,8 +21,6 @@ export class ReceptVanDeDagComponent implements OnInit {
     this.configService.fetchTotalRecipesIDs().subscribe(
       res => this.pickRecipe(res),
       error => console.error(error.message));
-    this.recipeName = 'Tosti'; // TODO verander naar database.getRecipeOfTheDay();
-    this.recipeDesc = 'Verwarm eerst het tostiijzer, daarna pleur je wat kaas en ham op je brood en werp je hem in het ijzer.';
   }
 
   private pickRecipe(res: any) {
@@ -45,13 +44,18 @@ export class ReceptVanDeDagComponent implements OnInit {
         res2 => this.createView(res2),
         error => console.log(error.message));
     }
-    console.log('excuted' + random);
   }
 
   createView(res: any) {
     console.log(res);
     this.recipeName = res.name;
     this.recipeDesc = res.desc;
-    this.recipeImg = res.image;
+    this.recipeId = res.id;
+    if (res.image) {
+      this.recipeImg = res.image;
+    } else {
+      this.recipeImg = 'assets/placeholder.jpg';
+    }
+
   }
 }

@@ -28,7 +28,8 @@
         <nav class="full-height">
           <button class="full-height btn btn-primary"  routerLink="/home"> Home </button>
           <button class="full-height btn btn-primary" *ngIf="loggedIn" routerLink="/boodschappenlijstje"> Boodschappenlijstje</button>
-          <button class="full-height btn btn-primary" routerLink="/receptDelen"> Recept uploaden </button>
+          <button class="full-height btn btn-primary" *ngIf="loggedIn" routerLink="/receptDelen"> Recept uploaden </button>
+          <button class="full-height btn btn-primary"  routerLink="/resultaat/"> Recept zoeken </button>
           <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/registreren"> Registreren </button>
           <button class="full-height btn btn-primary" *ngIf="!loggedIn" routerLink="/inloggen"> Inloggen </button>
           <button class="full-height btn btn-primary" *ngIf="loggedIn" (click)="this.logout()"> Uitloggen </button>
