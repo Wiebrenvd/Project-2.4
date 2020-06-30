@@ -47,7 +47,6 @@ export class ReceptVanDeDagComponent implements OnInit {
   }
 
   createView(res: any) {
-    console.log(res);
     this.recipeName = res.name;
     this.recipeDesc = res.desc;
     this.recipeId = res.id;

@@ -60,7 +60,8 @@ app.get('/recept/:id', (req, res) => {
     name: undefined,
     desc: undefined,
     image: undefined,
-    timers: undefined
+    timers: undefined,
+    id: undefined
   };
 
   if (req.headers.authorization != null) {
@@ -99,6 +100,7 @@ app.get('/recept/:id', (req, res) => {
       response.name = data[0].recipe_name;
       response.desc = data[0].recipe_desc;
       response.image = data[0].recipe_picture;
+      response.id = req.params.id;
 
       connection.query(`update recipes set clicks=clicks+1 where id = ${data[0].recipe_id}`, (err2, data2) => {
         if (err2) {
@@ -265,22 +267,19 @@ app.post('/upload', (req, res) => {
           console.log(err);
         }
 
-
-      });
-
-
-      valuesArray = [];
-      for (const seconds of req.body.timers) {
-        valuesArray.push(`(last_insert_id(), ${seconds})`);
-      }
-      queryValues = valuesArray.join(',');
-
-      connection.query(`insert into timers (recipes_id,seconds) values ${queryValues}`, (err2, data2) => {
-        if (err) {
-          console.log(err);
+        valuesArray = [];
+        for (const seconds of req.body.timers) {
+          valuesArray.push(`(last_insert_id(), ${seconds})`);
         }
+        queryValues = valuesArray.join(',');
 
-        res.send(JSON.stringify(response));
+        connection.query(`insert into timers (recipes_id,seconds) values ${queryValues}`, (err2, data2) => {
+          if (err) {
+            console.log(err);
+          }
+
+          res.send(JSON.stringify(response));
+        });
       });
     });
   });
@@ -457,8 +456,6 @@ app.put('/boodschappenlijstje', (req, res) => {
     } else {
       res.send(JSON.stringify(response));
     }
-
-
 
 
   });
