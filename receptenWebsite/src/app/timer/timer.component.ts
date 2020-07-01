@@ -183,6 +183,7 @@ export class TimerComponent implements OnInit {
       if (this.time <= 0 && this.running) { // Als hij runnend onder 0 seconde is, dan stopt het interval en sluit de timer af.
         clearInterval(this.interval);
         this.stop();
+        alert('Timer afgelopen');
       }
       this.calcTimeDifference(); // Bereken verschil tussen starttijd en tijd op dit moment
       if (this.running) {
